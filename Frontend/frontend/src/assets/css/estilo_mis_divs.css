@@ -1,0 +1,45 @@
+#list_usua{
+    height: 500px;
+    width: 18800px;
+    
+}
+#cola{
+    height: 500px;
+    width: 18800px;
+}
+#top_gra{
+    height: 500px;
+    width: 18800px;
+}
+#biblioteca{
+    height: 1000px;
+    width: 18800px;
+}
+#main-container{
+	margin: 150px auto;
+	width: 600px;
+
+}
+table{
+	background-color:gray;
+	text-align:  center;
+	border-collapse:  collapse;
+	width: 50%;
+}
+th, td{
+	padding: 20px;
+}
+thead{
+	background-color:  #C0C0C0;
+	border-bottom: solid 15px white;
+	color: black;
+
+}
+tr:nth-child(even){
+	background-color: pink;
+}
+tr:hover td{
+	background-color: pink;
+
+	color: white;
+}

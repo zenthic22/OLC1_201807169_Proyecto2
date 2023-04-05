@@ -1,0 +1,103 @@
+<main>
+    <section id="program" class="program">
+        <div class="container">
+            <div class="section-title">
+                <h3><font face="Candara"><strong><span>Cargar Entrada</span></strong></font></h3>
+                <p style="text-align: justify;">
+                    El curso de Organizacion de Lenguajes y Compiladores 1, ha puesto en marcha un nuevo 
+                    proyecto, requerido por la Escuela de Ciencias y Sistemas de la Facultad de Ingeniería, que 
+                    consiste en crear un lenguaje de programación para los estudiantes, del curso de 
+                    Introducción a la Programación y Computación 1.
+                </p>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><font face="Candara"><strong>Carga</strong></font></h5>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label" id="pruebajs">Selecciona un archivo en formato tw</label>
+                            <input class="form-control" type="file" id="user_input_archive" style="margin-left: 20px;">
+                        </div>
+                        <button type="button" class="btn btn-primary" style="margin-left: 20px;" id="user">Cargar Archivo</button>
+                    </div>
+                </div>
+            </div>
+            <form>
+                <div class="row content">
+                    <div class="col-lg-6">
+                        <div class="input-group mb-3">
+                            <textarea name="entrada" rows="15" cols="100" class="form-control" placeholder="inserte codigo aqui..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pt-4 pt-lg-0">
+                        <div class="input-group mb-3">
+                            <textarea name="salida" rows="15" cols="100" class="form-control" placeholder="consola de respuesta..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" style="margin-left: 20px;">Reset</button>
+                <button class="btn btn-success btn-block" style="margin-left: 20px;">Enviar</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="tree" class="tree">
+        <div class="container">
+            <div class="section-title">
+                <h2><font face="Candara"><strong>Arbol AST</strong></font></h2>
+                <h3><font face="Candara"><strong><span>Arbol AST</span></strong></font></h3>
+            </div>
+            <div class="d-flex flex-column border border-4 border-dark" id="arbol_ast" style="width: 100%;">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h3><font face="Candara"><strong><span>Reporte de Errores</span></strong></font></h3>
+            </div>
+            <table style="width: 75%;margin: 0 auto;" cellpadding ="5">
+                <tr>
+                   <th>Tipo Error</th>
+                   <th>Descripcion</th>
+                   <th>Linea</th>
+                   <th>Columna</th>
+                </tr>
+            </table>
+            <div id="hola">
+                <table style="width: 75%;margin: 0 auto;" cellpadding ="5">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h3><font face="Candara"><strong><span>Tabla de Simbolos</span></strong></font></h3>
+            </div>
+            <table style="width: 75%;margin: 0 auto;" cellpadding ="5">
+                <tr>
+                   <th>Nombre</th>
+                   <th>Tipo</th>
+                   <th>Valor</th>
+                </tr>
+            </table>
+            <div id="hola2">
+                <table style="width: 75%;margin: 0 auto;" cellpadding ="5">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
