@@ -1,0 +1,26 @@
+para ejecutar gramatica ---> npm run jison
+para ejecutar express ---> npm run dev
+
+para crear/ejecutar backend (express):
+    - npm init
+    - npm install express
+    - npm install @types/express
+    - npm install ejs
+    - npm install -g ts-node
+    - npm install -g typescript
+    - npm install --save-dev @types/node
+    - npm install nodemon --save-dev
+    - npm install -g jison
+    - npm i --save-dev @types/cors
+
+para crear/ejecutar frontend (vue):
+    - npm install -g @vue/cli
+    - vue create nombre-proyecto
+    - cd nombre-proyecto
+    - npm run serve
+
+localhost express: localhost: 4000
+localhost vue: localhost:3000
+
+let er = console.log("error")
+throw er;
