@@ -1,11 +1,11 @@
-import { Router } from "express";
+import express from 'express';
+import { interpreteController } from '../controller/interprete.controller';
+const router = express.Router();
 
-const router: Router = Router();
+//controlador
+router.get('/ping', interpreteController.ping);
 
-import { controller } from "../controller/controler";
-
-router.get('/', controller.helloWorld);
-
-router.post('/interpretar', controller.interpretar);
+//interpretar codigo fuente
+router.post('/interpretar', interpreteController.interpretar);
 
 export default router;

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts",
+    "start": "nodemon",
     "jison": "jison ./src/controller/interprete/interprete.jison && move interprete.js ./src/controller/interprete"
   },
   "author": "",
