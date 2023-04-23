@@ -9,8 +9,8 @@ export class Acceso extends Expression {
 
     public execute(env: Environment): Return {
         let value = env.getVar(this.id);
-        console.log("acceso: ",value?.valor);
-        if(value) {
+        //console.log("acceso: ",value?.valor);
+        if(value != null) {
             return { value: value.valor, type: value.type };
         } else {
             return { value: null, type: Type.NULL }

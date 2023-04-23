@@ -15,7 +15,7 @@ export class Print extends Instruction {
         this.value = value;
     }
 
-    public execute(env: Environment) {
+    public execute(env: Environment): any {
         for(const actual of this.value) {
             const val = actual.execute(env);
             console.log("desde consola: ", val.value);

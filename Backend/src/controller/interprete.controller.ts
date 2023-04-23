@@ -2,7 +2,8 @@
 import { Request, Response } from 'express';
 import { printlist } from './interprete/Reports/PrintList';
 import { Environment } from './interprete/abstract/Environment';
-import { Print } from './interprete/instruction/Print';
+import { Instruction } from './interprete/abstract/Instruction';
+import { Expression } from './interprete/abstract/Expression';
 
 //creando una clase controlador
 class InterpreteController {
@@ -29,7 +30,13 @@ class InterpreteController {
         const globalEnv = new Environment(null);
 
         for (const inst of ast){
-            inst.execute(globalEnv);
+          // if(inst instanceof Instruction) {
+          //   inst.execute(globalEnv);
+          // }
+          // if(inst instanceof Expression) {
+          //   inst.execute(globalEnv);
+          // }
+          inst.execute(globalEnv);
         }
         res.json({ consola:printlist.join("\n"), errores: "ninguno" });
 

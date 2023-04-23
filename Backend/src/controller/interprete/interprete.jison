@@ -11,6 +11,7 @@
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {} //comentario multilinea
 
 //simbolos reservados
+"=="                return 'IGUALACION';
 ";"                 return 'PUNTO_COMA';
 "("                 return 'PARIZQ';
 ")"                 return 'PARDER';
@@ -62,7 +63,6 @@
 "%"                 return 'MODULO';
 
 //simbolos relacionales
-"=="                return 'IGUALACION';
 "!="                return 'DIFERENCIACION';
 "<"                 return 'MENOR';
 "<="                return 'MENORIGUAL';
@@ -104,14 +104,32 @@
 %{
     const { Type } = require('./abstract/Return');
     const { TipoAritmetica } = require('./utils/TipoAritmetica');
+    const { TipoRelacional } = require('./utils/TipoRelacional');
+    const { TipoLogico } = require('./utils/TipoLogico');
     const { Primitivo } = require('./expression/Primitivo');
     const { Print } = require('./instruction/Print');
     const { Declarar } = require('./instruction/Declarar');
     const { Asignar } = require('./instruction/Asignar');
     const { Acceso } = require('./expression/Acceso');
     const { Aritmetica } = require('./expression/Aritmetica');
+    const { Relacional } = require('./expression/Relacional');
+    const { Logicos } = require('./expression/Logicos');
     const { Casteo } = require('./instruction/Casteo');
-
+    const { IncrementoDecremento } = require('./expression/IncrementoDecremento');
+    const { If } = require('./instruction/If');
+    const { Statement } = require('./instruction/Statement');
+    const { SwitchCase } = require('./instruction/SwitchCase');
+    const { Default } = require('./instruction/Default');
+    const { Break } = require('./instruction/Break');
+    const { While } = require('./instruction/While');
+    const { For } = require('./instruction/For');
+    const { DoWhile } = require('./instruction/DoWhile');
+    const { Continue } = require('./instruction/Continue');
+    const { Return } = require('./instruction/Return');
+    const { Funcion } = require('./instruction/Funcion');
+    const { LlamadaFuncion } = require('./expression/LlamadaFuncion');
+    const { ToLower } = require('./instruction/ToLower');
+    const { ToUpper } = require('./instruction/ToUpper');
 %}
 
 //precedencia de operadores
@@ -148,10 +166,9 @@ INSTRUCCION : DEFPRINT                 { $$ = $1; }
             | SENTENCIAFUNCION         { $$ = $1; }
             | LLAMADAFUNCION           { $$ = $1; }
             | RETORNAR PUNTO_COMA      { $$ = $1; }
-            | BREAK PUNTO_COMA         
-            | CONTINUE PUNTO_COMA      
+            | BREAK PUNTO_COMA         { $$ = new Break(@1.first_line, @1.first_column); }
+            | CONTINUE PUNTO_COMA      { $$ = new Continue(@1.first_line, @1.first_column); }
             | MAIN LLAMADAFUNCION      
-            | error PUNTO_COMA         { console.log('Error sintactico: '+yytext+', en la linea: '+this._$.first_line+', en la columna: '+this._$.first_column); }
             ;
 
 //gramatica para la funcion imprimir
@@ -225,7 +242,7 @@ TERNARIO : EXPRESION INTERROGACION EXPRESION DOS_PUNTOS EXPRESION
          ;
 
 //gramatica para la sentencia if
-SENTENCIAIF : IF PARIZQ EXPRESION PARDER STATEMENT SENTENCIAELSE        
+SENTENCIAIF : IF PARIZQ EXPRESION PARDER STATEMENT SENTENCIAELSE        { $$ = new If($3,$5,$6, @1.first_line, @1.first_column); }
             ;
 
 SENTENCIAELSE : ELSE STATEMENT      { $$ = $2; }
@@ -233,46 +250,45 @@ SENTENCIAELSE : ELSE STATEMENT      { $$ = $2; }
               | { $$ = null }
               ;
 
-STATEMENT : LLAVEIZQ INSTRUCCIONES LLAVEDER     
-          | LLAVEIZQ LLAVEDER                   
+STATEMENT : LLAVEIZQ INSTRUCCIONES LLAVEDER     { $$ = new Statement($2, @1.first_line, @1.first_column); }
+          | LLAVEIZQ LLAVEDER                   { $$ = new Statement([], @1.first_line, @1.first_column); }
           | error LLAVEDER                      { console.log('Error sintactico: '+yytext+', en la linea: '+this._$.first_line+', en la columna: '+this._$.first_column); }
           ;
 
 //gramatica para la sentencia switch case
-SENTENCIASWITCH : SWITCH PARIZQ EXPRESION PARDER LLAVEIZQ LISTACASOS LLAVEDER   
-                | error LLAVEDER                                                { console.log('Error sintactico: '+yytext+', en la linea: '+this._$.first_line+', en la columna: '+this._$.first_column); }
+SENTENCIASWITCH : SWITCH PARIZQ EXPRESION PARDER LLAVEIZQ LISTACASOS LLAVEDER   { $$ = new SwitchCase($3,$6,@1.first_line, @1.first_column); }
                 ;
 
 LISTACASOS : CASE EXPRESION DOS_PUNTOS CASESTATEMENT                { $$ = []; $$.push([$2, $4]); }
            | LISTACASOS CASE EXPRESION DOS_PUNTOS CASESTATEMENT     { $$ = $1; $$.push([$3, $5]); }
-           | DEFAULT DOS_PUNTOS CASESTATEMENT                       
-           | LISTACASOS DEFAULT DOS_PUNTOS CASESTATEMENT            
+           | DEFAULT DOS_PUNTOS CASESTATEMENT                       { $$.push([new Default(@1.first_line, @1.first_column),$3]); }
+           | LISTACASOS DEFAULT DOS_PUNTOS CASESTATEMENT            { $$ = $1; $$.push([new Default(@1.first_line, @1.first_column),$4]); }
            ;
 
-CASESTATEMENT : INSTRUCCIONES       
-              |                     
+CASESTATEMENT : INSTRUCCIONES       { $$ = new Statement($1, @1.first_line, @1.first_column); }
+              |                     { $$ = new Statement([], @1.first_line, @1.first_column); }
               ;
 
 //gramatica para la sentencia while
-CICLOWHILE : WHILE PARIZQ EXPRESION PARDER STATEMENT        
+CICLOWHILE : WHILE PARIZQ EXPRESION PARDER STATEMENT        { $$ = new While($3,$5, @1.first_line, @1.first_column); }
            ;
 
 //gramatica para la sentencia for
-SENTENCIAFOR : FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT       
-             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT        
-             | FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT     
-             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT      
+SENTENCIAFOR : FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT       { $$ = new For($3,$4,$6,$8, @1.first_line, @1.first_column); }
+             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT        { $$ = new For($3,$4,$6,$8, @1.first_line, @1.first_column); }
+             | FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT     { $$ = new For($3,$4,$6,$8, @1.first_line, @1.first_column); }
+             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT      { $$ = new For($3,$4,$6,$8, @1.first_line, @1.first_column); }
              ;
 
 //gramatica para la sentencia do-while
-SENTENCIADOWHILE : DO STATEMENT WHILE PARIZQ EXPRESION PARDER PUNTO_COMA    
+SENTENCIADOWHILE : DO STATEMENT WHILE PARIZQ EXPRESION PARDER PUNTO_COMA    { $$ = new DoWhile($5,$2, @1.first_line, @1.first_column); }
                  ;
 
 //gramatica para las funciones
-SENTENCIAFUNCION : TIPOS ID PARIZQ PARAMETROS PARDER STATEMENT      
-                 | TIPOS ID PARIZQ PARDER STATEMENT                 
-                 | VOID ID PARIZQ PARAMETROS PARDER STATEMENT       
-                 | VOID ID PARIZQ PARDER STATEMENT                  
+SENTENCIAFUNCION : TIPOS ID PARIZQ PARAMETROS PARDER STATEMENT      { $$ = new Funcion($1,$2,$4,$6, @1.first_line, @1.first_column); }
+                 | TIPOS ID PARIZQ PARDER STATEMENT                 { $$ = new Funcion($1,$2,[],$5, @1.first_line, @1.first_column); }
+                 | VOID ID PARIZQ PARAMETROS PARDER STATEMENT       { $$ = new Funcion($1,$2,$4,$6, @1.first_line, @1.first_column); }
+                 | VOID ID PARIZQ PARDER STATEMENT                  { $$ = new Funcion($1,$2,[],$5, @1.first_line, @1.first_column); }
                  ;
 
 PARAMETROS : PARAMETROS COMA TIPOS ID       { $1.push([$3, $4]); $$ = $1; }
@@ -280,8 +296,8 @@ PARAMETROS : PARAMETROS COMA TIPOS ID       { $1.push([$3, $4]); $$ = $1; }
            ;
 
 //gramatica para la llamada de funciones
-LLAMADAFUNCION : ID PARIZQ PARDER PUNTO_COMA                    
-               | ID PARIZQ LISTAPARAMETROS PARDER PUNTO_COMA    
+LLAMADAFUNCION : ID PARIZQ PARDER PUNTO_COMA                    { $$ = new LlamadaFuncion($1,[], @1.first_line, @1.first_column); }
+               | ID PARIZQ LISTAPARAMETROS PARDER PUNTO_COMA    { $$ = new LlamadaFuncion($1,$3, @1.first_line, @1.first_column); }
                ;
 
 LISTAPARAMETROS : LISTAPARAMETROS COMA EXPRESION    { $1.push($3); $$ = $1; }
@@ -289,8 +305,8 @@ LISTAPARAMETROS : LISTAPARAMETROS COMA EXPRESION    { $1.push($3); $$ = $1; }
                 ;
 
 //gramatica para retorno de variables, etc.
-RETORNAR : RETURN               
-         | RETURN EXPRESION     
+RETORNAR : RETURN               { $$ = new Return(@1.first_line, @1.first_column, null); }
+         | RETURN EXPRESION     { $$ = new Return(@1.first_line, @1.first_column, $2); }
          ;
 
 //gramatica para las expresiones
@@ -302,19 +318,19 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
           | EXPRESION MODULO EXPRESION              { $$ = new Aritmetica($1,$3,TipoAritmetica.MODULO, @1.first_line, @1.first_column); }    
           | MENOS EXPRESION %prec UMENOS            { $$= new Aritmetica($2,$2, TipoAritmetica.UMENOS,@1.first_line, @1.first_column); }    
 
-          | EXPRESION IGUALACION EXPRESION              
-          | EXPRESION DIFERENCIACION EXPRESION          
-          | EXPRESION MENOR EXPRESION                   
-          | EXPRESION MAYOR EXPRESION                   
-          | EXPRESION MENOR IGUAL EXPRESION             
-          | EXPRESION MAYOR IGUAL EXPRESION             
+          | EXPRESION IGUALACION EXPRESION          { $$ = new Relacional($1,$3,TipoRelacional.IGUALACION, @1.first_line, @1.first_column); }   
+          | EXPRESION DIFERENCIACION EXPRESION      { $$ = new Relacional($1,$3,TipoRelacional.DIFERENCIACION, @1.first_line, @1.first_column); }    
+          | EXPRESION MENOR EXPRESION               { $$ = new Relacional($1,$3,TipoRelacional.MENOR, @1.first_line, @1.first_column); }    
+          | EXPRESION MAYOR EXPRESION               { $$ = new Relacional($1,$3,TipoRelacional.MAYOR, @1.first_line, @1.first_column); }    
+          | EXPRESION MENOR IGUAL EXPRESION         { $$ = new Relacional($1,$4,TipoRelacional.MENORIGUAL, @1.first_line, @1.first_column); }    
+          | EXPRESION MAYOR IGUAL EXPRESION         { $$ = new Relacional($1,$4,TipoRelacional.MAYORIGUAL, @1.first_line, @1.first_column); }    
 
-          | EXPRESION AND EXPRESION                     
-          | EXPRESION OR EXPRESION                      
-          | NOT EXPRESION %prec NOT                     
+          | EXPRESION AND EXPRESION                 { $$ = new Logicos($1,$3,TipoLogico.AND, @1.first_line, @1.first_column); }    
+          | EXPRESION OR EXPRESION                  { $$ = new Logicos($1,$3,TipoLogico.OR, @1.first_line, @1.first_column); }    
+          | NOT EXPRESION %prec NOT                 { $$ = new Logicos($2,$2,TipoLogico.NOT, @1.first_line, @1.first_column); }    
 
-          | EXPRESION MAS MAS                           
-          | EXPRESION MENOS MENOS                       
+          | EXPRESION MAS MAS                           { $$ = new IncrementoDecremento(0,$1, @1.first_line, @1.first_column, $1); }
+          | EXPRESION MENOS MENOS                       { $$ = new IncrementoDecremento(1,$1, @1.first_line, @1.first_column, $1); }
 
           | PARIZQ EXPRESION PARDER                     { $$ = $2; }
           | ENTERO                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.INT); }
@@ -328,8 +344,8 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
           | ID CORIZQ EXPRESION CORDER                  
           | ID CORIZQ CORIZQ EXPRESION CORDER CORDER    
           
-          | TOLOWER PARIZQ EXPRESION PARDER             
-          | TOUPPER PARIZQ EXPRESION PARDER             
+          | TOLOWER PARIZQ EXPRESION PARDER             { $$ = new ToLower($3, @1.first_line, @1.first_column); }
+          | TOUPPER PARIZQ EXPRESION PARDER             { $$ = new ToUpper($3, @1.first_line, @1.first_column); }
           | LENGTH PARIZQ EXPRESION PARDER              
           | TRUNCATE PARIZQ EXPRESION PARDER            
           | ROUND PARIZQ EXPRESION PARDER               

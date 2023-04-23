@@ -1,14 +1,17 @@
 import { Simbolo } from './Symbol';
 import { Type } from './Return';
 import { printlist } from '../Reports/PrintList';
+import { Funcion } from '../instruction/Funcion';
 import { ListaTabla, TablaSimbolos } from '../Reports/TablaSimbolos';
 
 export class Environment {
     private variables = new Map<string, Simbolo>(); //mapa de variables
+    private funciones = new Map<string, Funcion>(); //mapa de funciones
 
     //constructor
     constructor(private anterior: Environment | null) {
         this.variables = new Map<string, Simbolo>();
+        this.funciones = new Map<string, Funcion>();
     }
 
     //guardar una nueva variable
@@ -24,16 +27,6 @@ export class Environment {
         } else {
             printlist.push("Error, La variable "+id+" ya existe en el entorno, linea "+linea+" y columna "+columna);
         }
-
-        /*let env: Environment | null = this;
-        while(env != null) {
-            if(env.variables.has(id)) {
-                env.variables.set(id, new Simbolo(valor, id, tipo))
-                return;
-            }
-            env = env.anterior;
-        }
-        this.variables.set(id, new Simbolo(valor, id, tipo));*/
     }
 
     //obtener una variable
@@ -52,18 +45,31 @@ export class Environment {
         return null;
     }
 
-    public actualizar_variable(nombre: string, new_valor: any) {
+    public guardarFuncion(id: string, funcion: Funcion) {
+        let env: Environment | null = this;
+        if(!env.funciones.has(id.toLowerCase())) {
+            env.funciones.set(id.toLowerCase(), funcion);
+        } else {
+            console.log("error funcion");
+        }
+    }
+
+    public getFuncion(id: string): Funcion | undefined | null {
         let env: Environment | null = this;
         while(env != null) {
-            if(env.variables.has(nombre.toLowerCase())) {
-                for(let entry of Array.from(env.variables)) {
-                    if(entry[0] === nombre) {
-                        entry[1].valor = new_valor;
-                    }
-                }
+            if(env.funciones.has(id.toLowerCase())) {
+                return env.funciones.get(id.toLowerCase());
             }
             env = env.anterior;
         }
         return null;
     }
+
+    public getGlobal(): Environment {
+        let env: Environment | null = this;
+        while(env.anterior != null) {
+            env = env?.anterior;
+        }
+        return env;
+    } 
 }
