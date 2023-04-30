@@ -25,16 +25,16 @@ export class Declarar extends Instruction {
         for(const actual of this.id) {
             let val = this.valor?.execute(env);
             if(this.valor == null) {
-                env.guardar(actual, val?.value, this.tipo, this.line, this.column);
+                env.guardar(actual, val?.value, this.tipo, this.line, this.column, null);
             } else if(this.tipo == 0 && val?.type == 1) {
-                env.guardar(actual, val.value, val.type, this.line, this.column);
+                env.guardar(actual, val.value, val.type, this.line, this.column, null);
             } else if(this.tipo == 1 && val?.type == 0) {
-                env.guardar(actual, val.value, val.type, this.line, this.column);
+                env.guardar(actual, val.value, val.type, this.line, this.column, null);
             } else if(this.tipo == val?.type) {
-                env.guardar(actual, val.value, val.type, this.line, this.column);
+                env.guardar(actual, val.value, val.type, this.line, this.column, null);
             }
              else {
-                env.guardar(actual, null, this.tipo, this.line, this.column);
+                env.guardar(actual, null, this.tipo, this.line, this.column, null);
             }
         }
     }

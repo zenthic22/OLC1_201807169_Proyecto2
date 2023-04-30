@@ -4,12 +4,16 @@ export enum Type {
     BOOLEAN = 2,
     CHAR = 3,
     STRING = 4,
-    NULL = 5
+    NULL = 5,
+    VECTOR = 6,
+    LISTA = 7
 }
 
 export type Return = {
     value: any,
-    type: Type
+    type: Type,
+    tamanio?:number,
+    edd?:Type
 }
 
 export const tipos_suma = [

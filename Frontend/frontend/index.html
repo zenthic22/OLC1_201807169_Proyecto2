@@ -1,104 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>Proyecto 2</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<style>
-body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-.w3-third img{margin-bottom: -6px; opacity: 0.8; cursor: pointer}
-.w3-third img:hover{opacity: 1}
-</style>
-</head>
-<body class="w3-light-grey w3-content" style="max-width:1600px">
-
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-bar-block w3-white w3-animate-left w3-text-grey w3-collapse w3-top w3-center" style="z-index:3;width:300px;font-weight:bold" id="mySidebar"><br>
-  <h3 class="w3-padding-64 w3-center"><b>Type<br>Wise</b></h3>
-  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">Entorno de Codigo</a> 
-  <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">Reportes</a> 
-  <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">Informacion de Estudiante</a>
-  <a href="#documentacion" class="w3-bar-item w3-button">Documentacion</a>
-</nav>
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px">
-
-  <!-- Push down content on small screens --> 
-  <div class="w3-hide-large" style="margin-top:83px"></div>
-  
-  <!-- Seccion Principal -->
-  <div class="w3-row">
-    <br>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 2</title>
+  </head>
+  <body>
     <div id="app"></div>
-    <br>
-    <br>
-  </div>
-
-  <!-- Seccion de Reportes -->
-  <div class="w3-container w3-dark-grey w3-center w3-text-light-grey w3-padding-32" id="about">
-    <h4><b>Reportes</b></h4>
-    <div class="w3-content w3-justify" style="max-width:600px">
-      <h4 class="w3-padding-16" style="text-align: center;">Reporte de Errores</h4>
-    </div>
-    <div class="w3-content w3-justify" style="max-width:600px">
-      <h4 class="w3-padding-16" style="text-align: center;">Tabla de Simbolos</h4>
-    </div>
-    <div class="w3-content w3-justify" style="max-width:600px">
-      <h4 class="w3-padding-16" style="text-align: center;">Arbol AST</h4>
-    </div>
-  </div>
-
-  <!-- Informacion Estudiante -->
-  <div class="w3-container w3-light-grey w3-padding-32 w3-padding-large" id="contact">
-    <div class="w3-content" style="max-width:600px">
-      <h4 class="w3-center"><b>Informacion del Estudiante</b></h4>
-      <p>Estudiante de ingenieria del curso Organizacion de Lenguajes y Compiladores 1</p>
-      <form action="/action_page.php" target="_blank">
-        <div class="w3-section">
-          <label>Nombre:</label>
-          <label>Erick Abdul Chacón Barillas</label>
-        </div>
-        <div class="w3-section">
-          <label>Carnet:</label>
-          <label>201807169</label>
-        </div>
-        <div class="w3-section">
-          <label>Sección: </label>
-          <label>C</label>
-        </div>
-        <img src="./src/imagenes/yo.jpg" style="width: 350px; height: 350px; float: left;">
-      </form>
-    </div>
-  </div>
-<!-- End page content -->
-</div>
-
-<script>
-// Script to open and close sidebar
-function w3_open() {
-  document.getElementById("mySidebar").style.display = "block";
-  document.getElementById("myOverlay").style.display = "block";
-}
- 
-function w3_close() {
-  document.getElementById("mySidebar").style.display = "none";
-  document.getElementById("myOverlay").style.display = "none";
-}
-
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-
-</script>
-
-<script type="module" src="./src/main.js"></script>
-
-</body>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js" integrity="sha512-FHsFVKQ/T1KWJDGSbrUhTJyS1ph3eRrxI228ND0EGaEp6v4a/vGwPWd3Dtd/+9cI7ccofZvl/wulICEurHN1pg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>

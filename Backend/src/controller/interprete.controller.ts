@@ -18,7 +18,7 @@ class InterpreteController {
     var parser = require("./interprete/interprete");
 
     // variable codigo fuente
-    const text = req.body.text;
+    const text = req.body.code;
     console.log("Codigo de entrada: " + text);
 
     try {

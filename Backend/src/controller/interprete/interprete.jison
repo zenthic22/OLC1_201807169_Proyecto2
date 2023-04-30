@@ -103,14 +103,24 @@
 
 %{
     const { Type } = require('./abstract/Return');
+    const { TipoPrimitivo } = require('./utils/TipoPrimitivo');
     const { TipoAritmetica } = require('./utils/TipoAritmetica');
     const { TipoRelacional } = require('./utils/TipoRelacional');
     const { TipoLogico } = require('./utils/TipoLogico');
     const { Primitivo } = require('./expression/Primitivo');
     const { Print } = require('./instruction/Print');
     const { Declarar } = require('./instruction/Declarar');
+    const { DeclararVector } = require('./instruction/DeclararVector');
+    const { DeclararLista } = require('./instruction/DeclararLista');
+    const { DeclararListaChar } = require('./instruction/DeclararListaChar');
     const { Asignar } = require('./instruction/Asignar');
+    const { AsignarVector } = require('./instruction/AsignarVector');
+    const { AsignarLista } = require('./instruction/AsignarLista');
+    const { AsignarListaChar } = require('./instruction/AsignarListaChar');
+    const { ModificarLista } = require('./instruction/ModificarLista');
     const { Acceso } = require('./expression/Acceso');
+    const { AccesoVector } = require('./expression/AccesoVector');
+    const { AccesoLista } = require('./expression/AccesoLista');
     const { Aritmetica } = require('./expression/Aritmetica');
     const { Relacional } = require('./expression/Relacional');
     const { Logicos } = require('./expression/Logicos');
@@ -127,7 +137,7 @@
     const { Continue } = require('./instruction/Continue');
     const { Return } = require('./instruction/Return');
     const { Funcion } = require('./instruction/Funcion');
-    const { LlamadaFuncion } = require('./expression/LlamadaFuncion');
+    const { LlamadaFuncion } = require('./instruction/LlamadaFuncion');
     const { ToLower } = require('./instruction/ToLower');
     const { ToUpper } = require('./instruction/ToUpper');
 %}
@@ -157,7 +167,12 @@ INSTRUCCIONES : INSTRUCCIONES INSTRUCCION   { $1.push($2); $$ = $1; }
 
 INSTRUCCION : DEFPRINT                 { $$ = $1; }
             | DECLARACION              { $$ = $1; }
+            | DECLARARARRAY            { $$ = $1; }
+            | DECLARARLISTAS           { $$ = $1; }
             | ASIGNACION               { $$ = $1; }
+            | ASIGNACIONARRAY          { $$ = $1; }
+            | ASIGNACIONLISTA          { $$ = $1; }
+            | MODIFICARLISTAS          { $$ = $1; }
             | SENTENCIAIF              { $$ = $1; }
             | SENTENCIASWITCH          { $$ = $1; }
             | CICLOWHILE               { $$ = $1; }
@@ -190,11 +205,15 @@ DECLARACION : TIPOS DECLARAVARIOS PUNTO_COMA                                    
             | TIPOS DECLARAVARIOS IGUAL TERNARIO PUNTO_COMA                                                 
             | TIPOS DECLARAVARIOS IGUAL CASTEO PUNTO_COMA                                                   { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
             | TIPOS DECLARAVARIOS IGUAL LLAMADAFUNCION                                                      
-            | TIPOS DECLARAVARIOS CORIZQ CORDER IGUAL NEW TIPOS CORIZQ EXPRESION CORDER PUNTO_COMA          
-            | TIPOS DECLARAVARIOS CORIZQ CORDER IGUAL LLAVEIZQ LISTAVALORES LLAVEDER PUNTO_COMA             
-            | LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL NEW LIST MENOR TIPOS MAYOR PUNTO_COMA              
-            | LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA     
             ;
+
+DECLARARARRAY : TIPOS CORIZQ CORDER DECLARAVARIOS IGUAL NEW TIPOS CORIZQ EXPRESION CORDER PUNTO_COMA      { $$ = new DeclararVector($1, $4, null, @1.first_line, @1.first_column, $9, $7); }
+              | TIPOS CORIZQ CORDER DECLARAVARIOS IGUAL LLAVEIZQ LISTAVALORES LLAVEDER PUNTO_COMA         { $$ = new DeclararVector($1, $4, $7, @1.first_line, @1.first_column, null, null); }
+              ;
+
+DECLARARLISTAS : LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL NEW LIST MENOR TIPOS MAYOR PUNTO_COMA          { $$ = new DeclararLista($3, $5, $10,[],@1.first_line, @1.first_column); }
+               | LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA { $$ = new DeclararListaChar($3, $5, $9, @1.first_line, @1.first_column); }
+               ;
 
 DECLARAVARIOS : DECLARAVARIOS COMA ID       { $1.push($3); $$ = $1; }
               | ID                          { $$ = [$1]; }
@@ -205,21 +224,27 @@ LISTAVALORES : LISTAVALORES COMA EXPRESION  { $1.push($3); $$ = $1; }
              ;
 
 //gramatica para asignacion de variables ya declaradas
-ASIGNACION : ID IGUAL EXPRESION PUNTO_COMA                                          { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
-           | ID IGUAL TERNARIO PUNTO_COMA                                           
-           | ID IGUAL CASTEO PUNTO_COMA                                             { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
-           | ID IGUAL LLAMADAFUNCION                                                
-           | EXPRESION PUNTO_COMA                                                   {/*aqui no hay nada*/}
-           | ID CORIZQ EXPRESION CORDER IGUAL EXPRESION PUNTO_COMA                  
-           | ID PUNTO ADD PARIZQ EXPRESION PARDER PUNTO_COMA                        
-           | ID CORIZQ CORIZQ EXPRESION CORDER CORDER IGUAL EXPRESION PUNTO_COMA    
-           | ID IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA                
+ASIGNACION : ID IGUAL EXPRESION PUNTO_COMA                                       { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
+           | ID IGUAL TERNARIO PUNTO_COMA                                        {}   
+           | ID IGUAL CASTEO PUNTO_COMA                                          { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
+           | ID IGUAL LLAMADAFUNCION                                             {}   
+           | EXPRESION PUNTO_COMA                                                {/*aqui no hay nada*/}
            ;
 
 ASIGNACION2 : ID IGUAL EXPRESION          { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
             | ID IGUAL TERNARIO     
             | ID IGUAL CASTEO             { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
             ;
+
+ASIGNACIONARRAY : ID CORIZQ EXPRESION CORDER IGUAL EXPRESION PUNTO_COMA { $$ = new AsignarVector($1, $3, $6, @1.first_line, @1.first_column); }
+                ;
+
+ASIGNACIONLISTA : ID PUNTO ADD PARIZQ EXPRESION PARDER PUNTO_COMA          { $$ = new AsignarLista($1, $5, @1.first_line, @1.first_column); }
+                | ID IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA  { $$ = new AsignarListaChar($1, $5, @1.first_line, @1.first_column); }
+                ;
+
+MODIFICARLISTAS : ID CORIZQ CORIZQ EXPRESION CORDER CORDER IGUAL EXPRESION PUNTO_COMA  { $$ = new ModificarLista($1, $4, $8, @1.first_line, @1.first_column); }
+                ;
 
 //gramatica para casteo de valores o variables
 CASTEO : PARIZQ TIPOCASTEO PARDER EXPRESION      { $$ = new Casteo($2, $4, @1.first_line, @1.first_column); }
@@ -230,11 +255,11 @@ TIPOCASTEO : RENTERO        { $$ = 0; }
            | RCHAR          { $$ = 3; }
            ;
 
-TIPOS : RENTERO     { $$ = Type.INT; }
-      | RDOUBLE     { $$ = Type.DOUBLE; }
-      | RSTRING     { $$ = Type.STRING; }
-      | RCHAR       { $$ = Type.CHAR; }
-      | RBOOLEAN    { $$ = Type.BOOLEAN; }
+TIPOS : RENTERO     { $$ = 0; }
+      | RDOUBLE     { $$ = 1; }
+      | RSTRING     { $$ = 4; }
+      | RCHAR       { $$ = 3; }
+      | RBOOLEAN    { $$ = 2; }
       ;
 
 //gramatica para la operacion ternaria
@@ -333,16 +358,16 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
           | EXPRESION MENOS MENOS                       { $$ = new IncrementoDecremento(1,$1, @1.first_line, @1.first_column, $1); }
 
           | PARIZQ EXPRESION PARDER                     { $$ = $2; }
-          | ENTERO                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.INT); }
-          | DECIMAL                                     { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.DOUBLE); }
-          | CADENA                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.STRING); }
-          | CARACTER                                    { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.CHAR); }
-          | TRUE                                        { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.BOOLEAN); }
-          | FALSE                                       { $$ = new Primitivo(@1.first_line, @1.first_column, $1, Type.BOOLEAN); }
+          | ENTERO                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.INT); }
+          | DECIMAL                                     { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.DOUBLE); }
+          | CADENA                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.STRING); }
+          | CARACTER                                    { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.CHAR); }
+          | TRUE                                        { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.BOOLEAN); }
+          | FALSE                                       { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.BOOLEAN); }
 
-          | ID                                          { $$ = new Acceso($1, @1.first_line, @1.first_column); }
-          | ID CORIZQ EXPRESION CORDER                  
-          | ID CORIZQ CORIZQ EXPRESION CORDER CORDER    
+          | ACCEDERVAR                                  { $$ = $1; }
+          | ACCEDERARRAY                                { $$ = $1; }
+          | ACCEDERLISTA                                { $$ = $1; }    
           
           | TOLOWER PARIZQ EXPRESION PARDER             { $$ = new ToLower($3, @1.first_line, @1.first_column); }
           | TOUPPER PARIZQ EXPRESION PARDER             { $$ = new ToUpper($3, @1.first_line, @1.first_column); }
@@ -352,3 +377,12 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
           | TYPEOF PARIZQ EXPRESION PARDER              
           | TOSTRING PARIZQ EXPRESION PARDER            
           ;
+
+ACCEDERVAR : ID { $$ = new Acceso($1, @1.first_line, @1.first_column); }
+           ;
+
+ACCEDERARRAY : ID CORIZQ EXPRESION CORDER { $$ = new AccesoVector($1, $3, @1.first_line, @1.first_column); }
+             ;
+
+ACCEDERLISTA : ID CORIZQ CORIZQ EXPRESION CORDER CORDER { $$ = new AccesoLista($1, $4, @1.first_line, @1.first_column); }
+             ;

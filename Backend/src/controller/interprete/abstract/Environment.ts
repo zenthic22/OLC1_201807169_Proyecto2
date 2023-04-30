@@ -14,16 +14,34 @@ export class Environment {
         this.funciones = new Map<string, Funcion>();
     }
 
+    //guardar un arreglo
+    public guardar_array(id:string, value:any, type: Type, line: number, column:number, tamanio:any, edd?:Type) {
+        let env: Environment | null = this;
+        let tam = tamanio;
+        while(env != null) {
+            if(env.variables.has(id.toLowerCase())) {
+                const val = env.variables.get(id.toLowerCase());
+                if(val?.type == type) {
+                    env.variables.set(id.toLowerCase(), new Simbolo(value, id, type, tam, edd));
+                } else {
+                    throw "nop, wenas tardes :D";
+                }
+            }
+            env = env.anterior;
+        }
+    }
+
     //guardar una nueva variable
-    public guardar(id:string, valor:any, tipo:Type, linea:number, columna:number) {
+    public guardar(id:string, valor:any, tipo:Type, linea:number, columna:number, tamanio:any, edd?:Type) {
         //verificar el ambito
         let env: Environment | null = this;
+        let tam = tamanio;
   
         // verificar si la variable ya existe
         if (!env.variables.has(id.toLowerCase())) {
             // guardar la variable
             // guardar la variable en una tabla de simbolos para el reporte
-            env.variables.set(id.toLowerCase(), new Simbolo(valor, id, tipo));
+            env.variables.set(id.toLowerCase(), new Simbolo(valor, id, tipo, tam, edd));
         } else {
             printlist.push("Error, La variable "+id+" ya existe en el entorno, linea "+linea+" y columna "+columna);
         }

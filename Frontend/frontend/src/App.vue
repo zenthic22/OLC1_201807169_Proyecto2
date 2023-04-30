@@ -1,9 +1,7 @@
 <script setup>
-  import Component from './components/Component.vue';
+  import Home from '../src/pages/Home.vue';
 </script>
 
-<style></style>
-
 <template>
-  <Component/>
+  <Home/>
 </template>
