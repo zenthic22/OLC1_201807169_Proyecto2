@@ -1,23 +1,32 @@
 import { Expression } from '../abstract/Expression';
-import { Funcion } from './Funcion';
 import { Instruction } from '../abstract/Instruction';
-import { Return, Type } from '../abstract/Return';
+import { Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 
-let contador:number = 0;
+export class Truncate extends Instruction {
+    private value: Expression;
 
-export class Truncate extends Expression {
     constructor(
-        public expresion: Expression,
+        value: Expression,
         line: number,
         column: number
     ) {
         super(line, column);
+        this.value = value;
     }
 
-    public execute(env: Environment): Return {
-        let resultado: Return;
-        resultado = resultado = { value: ("error de operacion"), type: Type.STRING }
-        return resultado;
+    public execute(env: Environment) {
+        let trun = this.value.execute(env);
+        try {
+            if(trun != null && trun != undefined) {
+                if(trun.type == 0 || trun.type == 1) {
+                    return { value: Math.trunc(trun.value), type: Type.INT }
+                } else {
+                    throw "error de truncate";
+                }
+            }
+        } catch(error) {
+            throw "error en funcion truncate";
+        }
     }
 }

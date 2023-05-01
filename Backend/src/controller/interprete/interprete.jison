@@ -138,8 +138,15 @@
     const { Return } = require('./instruction/Return');
     const { Funcion } = require('./instruction/Funcion');
     const { LlamadaFuncion } = require('./instruction/LlamadaFuncion');
+    const { Ternario } = require('./instruction/Ternario');
+    const { Length } = require('./instruction/Length');
+    const { Round } = require('./instruction/Round');
+    const { Typeof } = require('./instruction/Typeof');
+    const { Truncate } = require('./instruction/Truncate');
+    const { ToString } = require('./instruction/ToString');
     const { ToLower } = require('./instruction/ToLower');
     const { ToUpper } = require('./instruction/ToUpper');
+    const { Main } = require('./instruction/Main');
 %}
 
 //precedencia de operadores
@@ -183,7 +190,7 @@ INSTRUCCION : DEFPRINT                 { $$ = $1; }
             | RETORNAR PUNTO_COMA      { $$ = $1; }
             | BREAK PUNTO_COMA         { $$ = new Break(@1.first_line, @1.first_column); }
             | CONTINUE PUNTO_COMA      { $$ = new Continue(@1.first_line, @1.first_column); }
-            | MAIN LLAMADAFUNCION      
+            | MAIN LLAMADAFUNCION      { $$ = new Main($2, @1.first_line, @1.first_column); }
             ;
 
 //gramatica para la funcion imprimir
@@ -200,11 +207,11 @@ LISTAEXPRESION : LISTAEXPRESION COMA EXPRESION      { $1.push($3); $$ = $1; }
 - incluye el casteo de variables
 - declaracion de listas, vectores
 */
-DECLARACION : TIPOS DECLARAVARIOS PUNTO_COMA                                                                { $$ = new Declarar($1, $2, null, @1.first_line, @1.first_column); }
-            | TIPOS DECLARAVARIOS IGUAL EXPRESION PUNTO_COMA                                                { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
-            | TIPOS DECLARAVARIOS IGUAL TERNARIO PUNTO_COMA                                                 
-            | TIPOS DECLARAVARIOS IGUAL CASTEO PUNTO_COMA                                                   { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
-            | TIPOS DECLARAVARIOS IGUAL LLAMADAFUNCION                                                      
+DECLARACION : TIPOS DECLARAVARIOS PUNTO_COMA                    { $$ = new Declarar($1, $2, null, @1.first_line, @1.first_column); }
+            | TIPOS DECLARAVARIOS IGUAL EXPRESION PUNTO_COMA    { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
+            | TIPOS DECLARAVARIOS IGUAL TERNARIO PUNTO_COMA     { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
+            | TIPOS DECLARAVARIOS IGUAL CASTEO PUNTO_COMA       { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
+            | TIPOS DECLARAVARIOS IGUAL LLAMADAFUNCION          { $$ = new Declarar($1, $2, $4, @1.first_line, @1.first_column); }
             ;
 
 DECLARARARRAY : TIPOS CORIZQ CORDER DECLARAVARIOS IGUAL NEW TIPOS CORIZQ EXPRESION CORDER PUNTO_COMA      { $$ = new DeclararVector($1, $4, null, @1.first_line, @1.first_column, $9, $7); }
@@ -224,15 +231,15 @@ LISTAVALORES : LISTAVALORES COMA EXPRESION  { $1.push($3); $$ = $1; }
              ;
 
 //gramatica para asignacion de variables ya declaradas
-ASIGNACION : ID IGUAL EXPRESION PUNTO_COMA                                       { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
-           | ID IGUAL TERNARIO PUNTO_COMA                                        {}   
-           | ID IGUAL CASTEO PUNTO_COMA                                          { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
-           | ID IGUAL LLAMADAFUNCION                                             {}   
-           | EXPRESION PUNTO_COMA                                                {/*aqui no hay nada*/}
+ASIGNACION : ID IGUAL EXPRESION PUNTO_COMA      { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
+           | ID IGUAL TERNARIO PUNTO_COMA       { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }   
+           | ID IGUAL CASTEO PUNTO_COMA         { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }                                    
+           | ID IGUAL LLAMADAFUNCION            { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
+           | EXPRESION PUNTO_COMA               {/*aqui no hay nada*/}
            ;
 
 ASIGNACION2 : ID IGUAL EXPRESION          { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
-            | ID IGUAL TERNARIO     
+            | ID IGUAL TERNARIO           { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
             | ID IGUAL CASTEO             { $$ = new Asignar($1, $3, @1.first_line, @1.first_column); }
             ;
 
@@ -263,11 +270,11 @@ TIPOS : RENTERO     { $$ = 0; }
       ;
 
 //gramatica para la operacion ternaria
-TERNARIO : EXPRESION INTERROGACION EXPRESION DOS_PUNTOS EXPRESION       
+TERNARIO : EXPRESION INTERROGACION EXPRESION DOS_PUNTOS EXPRESION  { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); }     
          ;
 
 //gramatica para la sentencia if
-SENTENCIAIF : IF PARIZQ EXPRESION PARDER STATEMENT SENTENCIAELSE        { $$ = new If($3,$5,$6, @1.first_line, @1.first_column); }
+SENTENCIAIF : IF PARIZQ EXPRESION PARDER STATEMENT SENTENCIAELSE   { $$ = new If($3,$5,$6, @1.first_line, @1.first_column); }
             ;
 
 SENTENCIAELSE : ELSE STATEMENT      { $$ = $2; }
@@ -310,10 +317,10 @@ SENTENCIADOWHILE : DO STATEMENT WHILE PARIZQ EXPRESION PARDER PUNTO_COMA    { $$
                  ;
 
 //gramatica para las funciones
-SENTENCIAFUNCION : TIPOS ID PARIZQ PARAMETROS PARDER STATEMENT      { $$ = new Funcion($1,$2,$4,$6, @1.first_line, @1.first_column); }
-                 | TIPOS ID PARIZQ PARDER STATEMENT                 { $$ = new Funcion($1,$2,[],$5, @1.first_line, @1.first_column); }
-                 | VOID ID PARIZQ PARAMETROS PARDER STATEMENT       { $$ = new Funcion($1,$2,$4,$6, @1.first_line, @1.first_column); }
-                 | VOID ID PARIZQ PARDER STATEMENT                  { $$ = new Funcion($1,$2,[],$5, @1.first_line, @1.first_column); }
+SENTENCIAFUNCION : TIPOS ID PARIZQ PARAMETROS PARDER STATEMENT      { $$ = new Funcion($2,$6,$4,7, @1.first_line, @1.first_column); }
+                 | TIPOS ID PARIZQ PARDER STATEMENT                 { $$ = new Funcion($2,$5,[],7, @1.first_line, @1.first_column); }
+                 | VOID ID PARIZQ PARAMETROS PARDER STATEMENT       { $$ = new Funcion($2,$6,$4,8, @1.first_line, @1.first_column); }
+                 | VOID ID PARIZQ PARDER STATEMENT                  { $$ = new Funcion($2,$5,[],8, @1.first_line, @1.first_column); }
                  ;
 
 PARAMETROS : PARAMETROS COMA TIPOS ID       { $1.push([$3, $4]); $$ = $1; }
@@ -341,7 +348,7 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
           | EXPRESION DIVISION EXPRESION            { $$ = new Aritmetica($1,$3,TipoAritmetica.DIVISION, @1.first_line, @1.first_column); }    
           | EXPRESION POTENCIA EXPRESION            { $$ = new Aritmetica($1,$3,TipoAritmetica.POTENCIA, @1.first_line, @1.first_column); }
           | EXPRESION MODULO EXPRESION              { $$ = new Aritmetica($1,$3,TipoAritmetica.MODULO, @1.first_line, @1.first_column); }    
-          | MENOS EXPRESION %prec UMENOS            { $$= new Aritmetica($2,$2, TipoAritmetica.UMENOS,@1.first_line, @1.first_column); }    
+          | MENOS EXPRESION %prec UMENOS            { $$= new Aritmetica($2, new Primitivo(@1.first_line, @1.first_column, "-1", TipoPrimitivo.INT), TipoAritmetica.MULTIPLICACION, @1.first_line, @1.first_column); }    
 
           | EXPRESION IGUALACION EXPRESION          { $$ = new Relacional($1,$3,TipoRelacional.IGUALACION, @1.first_line, @1.first_column); }   
           | EXPRESION DIFERENCIACION EXPRESION      { $$ = new Relacional($1,$3,TipoRelacional.DIFERENCIACION, @1.first_line, @1.first_column); }    
@@ -356,7 +363,7 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
 
           | EXPRESION MAS MAS                           { $$ = new IncrementoDecremento(0,$1, @1.first_line, @1.first_column, $1); }
           | EXPRESION MENOS MENOS                       { $$ = new IncrementoDecremento(1,$1, @1.first_line, @1.first_column, $1); }
-
+             
           | PARIZQ EXPRESION PARDER                     { $$ = $2; }
           | ENTERO                                      { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.INT); }
           | DECIMAL                                     { $$ = new Primitivo(@1.first_line, @1.first_column, $1, TipoPrimitivo.DOUBLE); }
@@ -367,15 +374,14 @@ EXPRESION : EXPRESION MAS EXPRESION                 { $$ = new Aritmetica($1,$3,
 
           | ACCEDERVAR                                  { $$ = $1; }
           | ACCEDERARRAY                                { $$ = $1; }
-          | ACCEDERLISTA                                { $$ = $1; }    
-          
+          | ACCEDERLISTA                                { $$ = $1; } 
           | TOLOWER PARIZQ EXPRESION PARDER             { $$ = new ToLower($3, @1.first_line, @1.first_column); }
           | TOUPPER PARIZQ EXPRESION PARDER             { $$ = new ToUpper($3, @1.first_line, @1.first_column); }
-          | LENGTH PARIZQ EXPRESION PARDER              
-          | TRUNCATE PARIZQ EXPRESION PARDER            
-          | ROUND PARIZQ EXPRESION PARDER               
-          | TYPEOF PARIZQ EXPRESION PARDER              
-          | TOSTRING PARIZQ EXPRESION PARDER            
+          | LENGTH PARIZQ EXPRESION PARDER              { $$ = new Length($3, @1.first_line, @1.first_column); }
+          | TRUNCATE PARIZQ EXPRESION PARDER            { $$ = new Truncate($3, @1.first_line, @1.first_column); }
+          | ROUND PARIZQ EXPRESION PARDER               { $$ = new Round($3, @1.first_line, @1.first_column); }
+          | TYPEOF PARIZQ EXPRESION PARDER              { $$ = new Typeof($3, @1.first_line, @1.first_column); }
+          | TOSTRING PARIZQ EXPRESION PARDER            { $$ = new ToString($3, @1.first_line, @1.first_column); }
           ;
 
 ACCEDERVAR : ID { $$ = new Acceso($1, @1.first_line, @1.first_column); }

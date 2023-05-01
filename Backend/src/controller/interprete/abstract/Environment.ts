@@ -2,16 +2,15 @@ import { Simbolo } from './Symbol';
 import { Type } from './Return';
 import { printlist } from '../Reports/PrintList';
 import { Funcion } from '../instruction/Funcion';
-import { ListaTabla, TablaSimbolos } from '../Reports/TablaSimbolos';
 
 export class Environment {
-    private variables = new Map<string, Simbolo>(); //mapa de variables
-    private funciones = new Map<string, Funcion>(); //mapa de funciones
+    private variables = new Map<string, Simbolo>; //mapa de variables
+    private funciones = new Map<string, Funcion>; //mapa de funciones
 
     //constructor
     constructor(private anterior: Environment | null) {
-        this.variables = new Map<string, Simbolo>();
-        this.funciones = new Map<string, Funcion>();
+        this.variables = new Map();
+        this.funciones = new Map();
     }
 
     //guardar un arreglo
@@ -42,8 +41,6 @@ export class Environment {
             // guardar la variable
             // guardar la variable en una tabla de simbolos para el reporte
             env.variables.set(id.toLowerCase(), new Simbolo(valor, id, tipo, tam, edd));
-        } else {
-            printlist.push("Error, La variable "+id+" ya existe en el entorno, linea "+linea+" y columna "+columna);
         }
     }
 
@@ -63,16 +60,14 @@ export class Environment {
         return null;
     }
 
-    public guardarFuncion(id: string, funcion: Funcion) {
+    public guardarFuncion(id:string, funcion:Funcion, line:number, column: number, subr:number, type: Type) {
         let env: Environment | null = this;
         if(!env.funciones.has(id.toLowerCase())) {
-            env.funciones.set(id.toLowerCase(), funcion);
-        } else {
-            console.log("error funcion");
+            this.funciones.set(id.toLowerCase(), funcion);
         }
     }
 
-    public getFuncion(id: string): Funcion | undefined | null {
+    public getFuncion(id: string): Funcion | undefined {
         let env: Environment | null = this;
         while(env != null) {
             if(env.funciones.has(id.toLowerCase())) {
@@ -80,12 +75,12 @@ export class Environment {
             }
             env = env.anterior;
         }
-        return null;
+        return undefined;
     }
 
     public getGlobal(): Environment {
         let env: Environment | null = this;
-        while(env.anterior != null) {
+        while(env?.anterior != null) {
             env = env?.anterior;
         }
         return env;

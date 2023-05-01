@@ -1,21 +1,25 @@
-import { Environment } from '../abstract/Environment';
-import { Type } from '../abstract/Return';
+import { Environment } from "../abstract/Environment";
+import { Type } from "../abstract/Return";
 import { Instruction } from '../abstract/Instruction';
-import { Expression } from '../abstract/Expression';
 
 export class Funcion extends Instruction {
     constructor(
-        private tipo: Type,
-        private id: string,
-        public parametros: Array<Expression>,
+        public id: string,
         public statement: Instruction,
+        public parametros: [],
+        public subrutina: number,
         line: number,
         column: number,
+        public tipo?: Type
     ) {
         super(line, column);
     }
 
     public execute(env: Environment) {
-        env.guardarFuncion(this.id, this);
+        if(this.tipo == null || this.tipo == undefined) {
+            env.guardarFuncion(this.id, this, this.line, this.column, this.subrutina, Type.NULL);
+        } else {
+            env.guardarFuncion(this.id, this, this.line,this.column,this.subrutina,this.tipo);
+        }
     }
 }

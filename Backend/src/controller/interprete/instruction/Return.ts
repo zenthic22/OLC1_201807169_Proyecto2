@@ -1,21 +1,21 @@
 import { Expression } from '../abstract/Expression';
-import { Funcion } from './Funcion';
 import { Instruction } from '../abstract/Instruction';
-import { Return, Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 
-export class Retorno extends Expression {
+export class Return extends Instruction {
     constructor(
-        public expresion: Expression,
         line: number,
         column: number,
+        public retorno?: Expression
     ) {
         super(line, column);
     }
 
-    public execute(env: Environment): Return {
-        let resultado: Return;
-        resultado = resultado = { value:("error de operacion"), type: Type.STRING }
-        return resultado;
+    public execute(env: Environment) {
+        if(this.retorno != null || this.retorno != undefined) {
+            const r = this.retorno?.execute(env)
+            return { value: r?.value, type: 'Return', tipo: r?.type, line: this.line, column: this.column }
+        }
+        return { value: undefined, type: 'Return', line: this.line, column: this.column }
     }
 }

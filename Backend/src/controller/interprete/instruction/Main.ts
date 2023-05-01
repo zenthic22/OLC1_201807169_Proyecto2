@@ -1,13 +1,10 @@
-import { Expression } from '../abstract/Expression';
 import { Instruction } from '../abstract/Instruction';
 import { Environment } from '../abstract/Environment';
-
-let contador: number = 0;
+import { LlamadaFuncion } from '../instruction/LlamadaFuncion';
 
 export class Main extends Instruction {
     constructor(
-        private id: string,
-        private expresiones: Array<Expression>, 
+        private funcioninicial: LlamadaFuncion,
         line: number,
         column: number
     ) {
@@ -15,6 +12,6 @@ export class Main extends Instruction {
     }
 
     public execute(env: Environment) {
-        
+        this.funcioninicial.execute(env);
     }
 }

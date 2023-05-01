@@ -1,23 +1,30 @@
 import { Expression } from '../abstract/Expression';
-import { Funcion } from './Funcion';
 import { Instruction } from '../abstract/Instruction';
-import { Return, Type } from '../abstract/Return';
+import { Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 
-let contador:number = 0;
+export class ToString extends Instruction {
+    private value: Expression;
 
-export class ToString extends Expression {
     constructor(
-        public expresion: Expression,
+        value: Expression,
         line: number,
         column: number
     ) {
         super(line, column);
+        this.value = value;
     }
 
-    public execute(env: Environment): Return {
-        let resultado: Return;
-        resultado = resultado = { value: ("error de operacion"), type: Type.STRING }
-        return resultado;
+    public execute(env: Environment): any {
+        let to_cadena = this.value.execute(env);
+        try {
+            if(to_cadena.type == 0 || to_cadena.type == 2) {
+                return { value: to_cadena.value.toString(), type: Type.STRING }
+            } else {
+                throw "no es posible convertir en cadena la variable";
+            }
+        } catch(error) {
+            throw "error en funcion tostring";
+        }
     }
 }
