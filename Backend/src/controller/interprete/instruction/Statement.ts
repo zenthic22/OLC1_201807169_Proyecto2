@@ -31,17 +31,13 @@ export class Statement extends Instruction {
     public getAST(): { codigorama: string; nombrenodo: string; } {
         const aleatorio = Math.floor(Math.random()*(100-0)+0);
         let nombreNodoP = "nodostatement"+aleatorio.toString();
-
-        let bloque = "";
-
-        for(const actual of this.code) {
-            bloque += "nodoauxstatement"+actual+"[label=\"BLOQUE\"];\n";
-
+        let ramaState = `${nombreNodoP}[label="Instrucciones"];\n`;
+        for(let i=0; i<this.code.length; i++) {
+            const codigoState:{ codigorama:string, nombrenodo:string } = this.code[i].getAST();
+            ramaState += codigoState.codigorama+"\n";
+            ramaState += `${nombreNodoP} -> ${codigoState.nombrenodo};\n`;
         }
-
-        const codigorama = `
-            ${nombreNodoP}[label="STATEMENT"];
-            `
-        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
+    
+        return {codigorama:ramaState , nombrenodo:nombreNodoP.toString()};
     }
 }

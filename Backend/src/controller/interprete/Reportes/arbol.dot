@@ -1,25 +1,820 @@
 digraph G {
 principal[label="AST"];
 
+                   nodoInstFun813[label = "Declarar"];
+nodoTFun813[label = "Tipo"];
+nodoIdFun813[label = "funcionesEspecialesYNativas"];
+nodoPFun813[label = "Parametros"];
+nodoInstFun813 -> nodoTFun813;
+nodoInstFun813 -> nodoIdFun813;
+nodoIdFun813 -> nodoPFun813;
+nodostatement25[label="Instrucciones"];
+ 
+        nododeclarar28[label ="DECLARAR"];
+        nodoauxdeclarara[label ="DECLARAR"];
+nodotiponododeclarar28a[label="TIPO"];
+nodotiposnododeclarar28a[label=ENTERO];
+nodosisnododeclarar28a[label="ID"];
+nodosidsnododeclarar28a[label=a]; 
+        nodoprimitivo97[label ="PRIMITIVO"];
+        nodotiponodoprimitivo97[label="ENTERO"];
+        nodovalornodoprimitivo97[label="15"];
+        nodoprimitivo97 ->nodotiponodoprimitivo97;
+        nodotiponodoprimitivo97 ->nodovalornodoprimitivo97;
+        
+
+        nododeclarar28-> nodoauxdeclarara;
+nodoauxdeclarara-> nodotiponododeclarar28a;
+nodotiponododeclarar28a->nodotiposnododeclarar28a;
+nodotiposnododeclarar28a -> nodosisnododeclarar28a;
+nodosisnododeclarar28a-> nodosidsnododeclarar28a;
+nodoauxdeclarara ->nodoprimitivo97;
+
+        
+nodostatement25 -> nododeclarar28;
+ 
+        print57[label ="PRINT"];
+         
+        nodoprimitivo17[label ="PRIMITIVO"];
+        nodotiponodoprimitivo17[label="CADENA"];
+        nodovalornodoprimitivo17[label="------------------TOLOWER-------------------"];
+        nodoprimitivo17 ->nodotiponodoprimitivo17;
+        nodotiponodoprimitivo17 ->nodovalornodoprimitivo17;
+        
+
+        print57->nodoprimitivo17;
+
+        
+nodostatement25 -> print57;
+ 
+        print89[label ="PRINT"];
+         
+        nodoprimitivo84[label ="PRIMITIVO"];
+        nodotiponodoprimitivo84[label="CADENA"];
+        nodovalornodoprimitivo84[label="SIN TOLOWER"];
+        nodoprimitivo84 ->nodotiponodoprimitivo84;
+        nodotiponodoprimitivo84 ->nodovalornodoprimitivo84;
+        
+
+        print89->nodoprimitivo84;
+
+        
+nodostatement25 -> print89;
+ 
+        print94[label ="PRINT"];
+         
+        nodotolower94[label ="TO LOWER"];
+        
+
+        print94->nodotolower94;
+
+        
+nodostatement25 -> print94;
+ 
+        print14[label ="PRINT"];
+         
+        nodoprimitivo53[label ="PRIMITIVO"];
+        nodotiponodoprimitivo53[label="CADENA"];
+        nodovalornodoprimitivo53[label="------------------TOUPPER-------------------"];
+        nodoprimitivo53 ->nodotiponodoprimitivo53;
+        nodotiponodoprimitivo53 ->nodovalornodoprimitivo53;
+        
+
+        print14->nodoprimitivo53;
+
+        
+nodostatement25 -> print14;
+ 
+        print88[label ="PRINT"];
+         
+        nodoprimitivo38[label ="PRIMITIVO"];
+        nodotiponodoprimitivo38[label="CADENA"];
+        nodovalornodoprimitivo38[label="sin toupper"];
+        nodoprimitivo38 ->nodotiponodoprimitivo38;
+        nodotiponodoprimitivo38 ->nodovalornodoprimitivo38;
+        
+
+        print88->nodoprimitivo38;
+
+        
+nodostatement25 -> print88;
+ 
+        print58[label ="PRINT"];
+         
+        nodotoupper7[label ="TO UPPER"];
+        
+
+        print58->nodotoupper7;
+
+        
+nodostatement25 -> print58;
+ 
+        print1[label ="PRINT"];
+         
+        nodoprimitivo92[label ="PRIMITIVO"];
+        nodotiponodoprimitivo92[label="CADENA"];
+        nodovalornodoprimitivo92[label="------------------TRUNCATE------------------"];
+        nodoprimitivo92 ->nodotiponodoprimitivo92;
+        nodotiponodoprimitivo92 ->nodovalornodoprimitivo92;
+        
+
+        print1->nodoprimitivo92;
+
+        
+nodostatement25 -> print1;
+ 
+        nododeclarar14[label ="DECLARAR"];
+        nodoauxdeclararb[label ="DECLARAR"];
+nodotiponododeclarar14b[label="TIPO"];
+nodotiposnododeclarar14b[label=DOULBE];
+nodosisnododeclarar14b[label="ID"];
+nodosidsnododeclarar14b[label=b]; 
+        nodoprimitivo34[label ="PRIMITIVO"];
+        nodotiponodoprimitivo34[label="DOULBE"];
+        nodovalornodoprimitivo34[label="17.8"];
+        nodoprimitivo34 ->nodotiponodoprimitivo34;
+        nodotiponodoprimitivo34 ->nodovalornodoprimitivo34;
+        
+
+        nododeclarar14-> nodoauxdeclararb;
+nodoauxdeclararb-> nodotiponododeclarar14b;
+nodotiponododeclarar14b->nodotiposnododeclarar14b;
+nodotiposnododeclarar14b -> nodosisnododeclarar14b;
+nodosisnododeclarar14b-> nodosidsnododeclarar14b;
+nodoauxdeclararb ->nodoprimitivo34;
+
+        
+nodostatement25 -> nododeclarar14;
+ 
+        print22[label ="PRINT"];
+         
+        nodoaritmetica40[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica40[label="SUMA"];
+         
+        nodoprimitivo74[label ="PRIMITIVO"];
+        nodotiponodoprimitivo74[label="CADENA"];
+        nodovalornodoprimitivo74[label="sin truncate: "];
+        nodoprimitivo74 ->nodotiponodoprimitivo74;
+        nodotiponodoprimitivo74 ->nodovalornodoprimitivo74;
+        
+         
+        nodoacceso57[label ="ACCESO"];
+        nodovalnodoacceso57[label="b"];
+        nodoacceso57 -> nodovalnodoacceso57;
+        
+        nodoaritmetica40 ->nodoprimitivo74;
+        nodoaritmetica40 -> nodooperacionnodoaritmetica40;
+        nodoaritmetica40 ->nodoacceso57;
+        
+
+        print22->nodoaritmetica40;
+
+        
+nodostatement25 -> print22;
+ 
+        nododeclarar24[label ="DECLARAR"];
+        nodoauxdeclararb2[label ="DECLARAR"];
+nodotiponododeclarar24b2[label="TIPO"];
+nodotiposnododeclarar24b2[label=ENTERO];
+nodosisnododeclarar24b2[label="ID"];
+nodosidsnododeclarar24b2[label=b2]; 
+        nodotruncate99[label ="TRUNCATE"];
+        
+
+        nododeclarar24-> nodoauxdeclararb2;
+nodoauxdeclararb2-> nodotiponododeclarar24b2;
+nodotiponododeclarar24b2->nodotiposnododeclarar24b2;
+nodotiposnododeclarar24b2 -> nodosisnododeclarar24b2;
+nodosisnododeclarar24b2-> nodosidsnododeclarar24b2;
+nodoauxdeclararb2 ->nodotruncate99;
+
+        
+nodostatement25 -> nododeclarar24;
+ 
+        print31[label ="PRINT"];
+         
+        nodoaritmetica77[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica77[label="SUMA"];
+         
+        nodoprimitivo88[label ="PRIMITIVO"];
+        nodotiponodoprimitivo88[label="CADENA"];
+        nodovalornodoprimitivo88[label="con truncate "];
+        nodoprimitivo88 ->nodotiponodoprimitivo88;
+        nodotiponodoprimitivo88 ->nodovalornodoprimitivo88;
+        
+         
+        nodoacceso31[label ="ACCESO"];
+        nodovalnodoacceso31[label="b2"];
+        nodoacceso31 -> nodovalnodoacceso31;
+        
+        nodoaritmetica77 ->nodoprimitivo88;
+        nodoaritmetica77 -> nodooperacionnodoaritmetica77;
+        nodoaritmetica77 ->nodoacceso31;
+        
+
+        print31->nodoaritmetica77;
+
+        
+nodostatement25 -> print31;
+ 
+        print48[label ="PRINT"];
+         
+        nodoprimitivo88[label ="PRIMITIVO"];
+        nodotiponodoprimitivo88[label="CADENA"];
+        nodovalornodoprimitivo88[label="------------------ROUND-------------------"];
+        nodoprimitivo88 ->nodotiponodoprimitivo88;
+        nodotiponodoprimitivo88 ->nodovalornodoprimitivo88;
+        
+
+        print48->nodoprimitivo88;
+
+        
+nodostatement25 -> print48;
+ 
+        nododeclarar23[label ="DECLARAR"];
+        nodoauxdeclararc[label ="DECLARAR"];
+nodotiponododeclarar23c[label="TIPO"];
+nodotiposnododeclarar23c[label=DOULBE];
+nodosisnododeclarar23c[label="ID"];
+nodosidsnododeclarar23c[label=c]; 
+        nodoprimitivo31[label ="PRIMITIVO"];
+        nodotiponodoprimitivo31[label="DOULBE"];
+        nodovalornodoprimitivo31[label="26.5"];
+        nodoprimitivo31 ->nodotiponodoprimitivo31;
+        nodotiponodoprimitivo31 ->nodovalornodoprimitivo31;
+        
+
+        nododeclarar23-> nodoauxdeclararc;
+nodoauxdeclararc-> nodotiponododeclarar23c;
+nodotiponododeclarar23c->nodotiposnododeclarar23c;
+nodotiposnododeclarar23c -> nodosisnododeclarar23c;
+nodosisnododeclarar23c-> nodosidsnododeclarar23c;
+nodoauxdeclararc ->nodoprimitivo31;
+
+        
+nodostatement25 -> nododeclarar23;
+ 
+        print35[label ="PRINT"];
+         
+        nodoaritmetica18[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica18[label="SUMA"];
+         
+        nodoprimitivo67[label ="PRIMITIVO"];
+        nodotiponodoprimitivo67[label="CADENA"];
+        nodovalornodoprimitivo67[label="sin round: "];
+        nodoprimitivo67 ->nodotiponodoprimitivo67;
+        nodotiponodoprimitivo67 ->nodovalornodoprimitivo67;
+        
+         
+        nodoacceso55[label ="ACCESO"];
+        nodovalnodoacceso55[label="c"];
+        nodoacceso55 -> nodovalnodoacceso55;
+        
+        nodoaritmetica18 ->nodoprimitivo67;
+        nodoaritmetica18 -> nodooperacionnodoaritmetica18;
+        nodoaritmetica18 ->nodoacceso55;
+        
+
+        print35->nodoaritmetica18;
+
+        
+nodostatement25 -> print35;
+ 
+        nodoasignacion2[label ="ASIGNAR"];
+        nodoIDSnodoasignacion2[label="ID"];
+        nodoidnodoasignacion2[label="c"];
+         
+        nodoround26[label ="ROUND"];
+        
+        nodoasignacion2 ->nodoIDSnodoasignacion2 ->nodoidnodoasignacion2;
+        nodoasignacion2->nodoround26;
+        
+nodostatement25 -> nodoasignacion2;
+ 
+        print15[label ="PRINT"];
+         
+        nodoaritmetica68[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica68[label="SUMA"];
+         
+        nodoprimitivo3[label ="PRIMITIVO"];
+        nodotiponodoprimitivo3[label="CADENA"];
+        nodovalornodoprimitivo3[label="con round "];
+        nodoprimitivo3 ->nodotiponodoprimitivo3;
+        nodotiponodoprimitivo3 ->nodovalornodoprimitivo3;
+        
+         
+        nodoacceso4[label ="ACCESO"];
+        nodovalnodoacceso4[label="c"];
+        nodoacceso4 -> nodovalnodoacceso4;
+        
+        nodoaritmetica68 ->nodoprimitivo3;
+        nodoaritmetica68 -> nodooperacionnodoaritmetica68;
+        nodoaritmetica68 ->nodoacceso4;
+        
+
+        print15->nodoaritmetica68;
+
+        
+nodostatement25 -> print15;
+ 
+        nododeclarar6[label ="DECLARAR"];
+        nodoauxdeclararcc[label ="DECLARAR"];
+nodotiponododeclarar6cc[label="TIPO"];
+nodotiposnododeclarar6cc[label=DOULBE];
+nodosisnododeclarar6cc[label="ID"];
+nodosidsnododeclarar6cc[label=cc]; 
+        nodoprimitivo82[label ="PRIMITIVO"];
+        nodotiponodoprimitivo82[label="DOULBE"];
+        nodovalornodoprimitivo82[label="26.4"];
+        nodoprimitivo82 ->nodotiponodoprimitivo82;
+        nodotiponodoprimitivo82 ->nodovalornodoprimitivo82;
+        
+
+        nododeclarar6-> nodoauxdeclararcc;
+nodoauxdeclararcc-> nodotiponododeclarar6cc;
+nodotiponododeclarar6cc->nodotiposnododeclarar6cc;
+nodotiposnododeclarar6cc -> nodosisnododeclarar6cc;
+nodosisnododeclarar6cc-> nodosidsnododeclarar6cc;
+nodoauxdeclararcc ->nodoprimitivo82;
+
+        
+nodostatement25 -> nododeclarar6;
+ 
+        print72[label ="PRINT"];
+         
+        nodoaritmetica67[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica67[label="SUMA"];
+         
+        nodoprimitivo8[label ="PRIMITIVO"];
+        nodotiponodoprimitivo8[label="CADENA"];
+        nodovalornodoprimitivo8[label="sin round: "];
+        nodoprimitivo8 ->nodotiponodoprimitivo8;
+        nodotiponodoprimitivo8 ->nodovalornodoprimitivo8;
+        
+         
+        nodoacceso26[label ="ACCESO"];
+        nodovalnodoacceso26[label="cc"];
+        nodoacceso26 -> nodovalnodoacceso26;
+        
+        nodoaritmetica67 ->nodoprimitivo8;
+        nodoaritmetica67 -> nodooperacionnodoaritmetica67;
+        nodoaritmetica67 ->nodoacceso26;
+        
+
+        print72->nodoaritmetica67;
+
+        
+nodostatement25 -> print72;
+ 
+        nodoasignacion91[label ="ASIGNAR"];
+        nodoIDSnodoasignacion91[label="ID"];
+        nodoidnodoasignacion91[label="cc"];
+         
+        nodoround54[label ="ROUND"];
+        
+        nodoasignacion91 ->nodoIDSnodoasignacion91 ->nodoidnodoasignacion91;
+        nodoasignacion91->nodoround54;
+        
+nodostatement25 -> nodoasignacion91;
+ 
+        print46[label ="PRINT"];
+         
+        nodoaritmetica85[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica85[label="SUMA"];
+         
+        nodoprimitivo31[label ="PRIMITIVO"];
+        nodotiponodoprimitivo31[label="CADENA"];
+        nodovalornodoprimitivo31[label="con round "];
+        nodoprimitivo31 ->nodotiponodoprimitivo31;
+        nodotiponodoprimitivo31 ->nodovalornodoprimitivo31;
+        
+         
+        nodoacceso36[label ="ACCESO"];
+        nodovalnodoacceso36[label="cc"];
+        nodoacceso36 -> nodovalnodoacceso36;
+        
+        nodoaritmetica85 ->nodoprimitivo31;
+        nodoaritmetica85 -> nodooperacionnodoaritmetica85;
+        nodoaritmetica85 ->nodoacceso36;
+        
+
+        print46->nodoaritmetica85;
+
+        
+nodostatement25 -> print46;
+ 
+        print42[label ="PRINT"];
+         
+        nodoprimitivo19[label ="PRIMITIVO"];
+        nodotiponodoprimitivo19[label="CADENA"];
+        nodovalornodoprimitivo19[label="-----------------TYPEOF--------------------"];
+        nodoprimitivo19 ->nodotiponodoprimitivo19;
+        nodotiponodoprimitivo19 ->nodovalornodoprimitivo19;
+        
+
+        print42->nodoprimitivo19;
+
+        
+nodostatement25 -> print42;
+ 
+        nododeclarar46[label ="DECLARAR"];
+        nodoauxdeclararx[label ="DECLARAR"];
+nodotiponododeclarar46x[label="TIPO"];
+nodotiposnododeclarar46x[label=CADENA];
+nodosisnododeclarar46x[label="ID"];
+nodosidsnododeclarar46x[label=x]; 
+        nodoprimitivo23[label ="PRIMITIVO"];
+        nodotiponodoprimitivo23[label="CADENA"];
+        nodovalornodoprimitivo23[label="soy una cadena"];
+        nodoprimitivo23 ->nodotiponodoprimitivo23;
+        nodotiponodoprimitivo23 ->nodovalornodoprimitivo23;
+        
+
+        nododeclarar46-> nodoauxdeclararx;
+nodoauxdeclararx-> nodotiponododeclarar46x;
+nodotiponododeclarar46x->nodotiposnododeclarar46x;
+nodotiposnododeclarar46x -> nodosisnododeclarar46x;
+nodosisnododeclarar46x-> nodosidsnododeclarar46x;
+nodoauxdeclararx ->nodoprimitivo23;
+
+        
+nodostatement25 -> nododeclarar46;
+ 
+        nododeclarar86[label ="DECLARAR"];
+        nodoauxdeclarary[label ="DECLARAR"];
+nodotiponododeclarar86y[label="TIPO"];
+nodotiposnododeclarar86y[label=ENTERO];
+nodosisnododeclarar86y[label="ID"];
+nodosidsnododeclarar86y[label=y]; 
+        nodoprimitivo1[label ="PRIMITIVO"];
+        nodotiponodoprimitivo1[label="ENTERO"];
+        nodovalornodoprimitivo1[label="50"];
+        nodoprimitivo1 ->nodotiponodoprimitivo1;
+        nodotiponodoprimitivo1 ->nodovalornodoprimitivo1;
+        
+
+        nododeclarar86-> nodoauxdeclarary;
+nodoauxdeclarary-> nodotiponododeclarar86y;
+nodotiponododeclarar86y->nodotiposnododeclarar86y;
+nodotiposnododeclarar86y -> nodosisnododeclarar86y;
+nodosisnododeclarar86y-> nodosidsnododeclarar86y;
+nodoauxdeclarary ->nodoprimitivo1;
+
+        
+nodostatement25 -> nododeclarar86;
+ 
+        nododeclarar36[label ="DECLARAR"];
+        nodoauxdeclararz[label ="DECLARAR"];
+nodotiponododeclarar36z[label="TIPO"];
+nodotiposnododeclarar36z[label=DOULBE];
+nodosisnododeclarar36z[label="ID"];
+nodosidsnododeclarar36z[label=z]; 
+        nodoprimitivo10[label ="PRIMITIVO"];
+        nodotiponodoprimitivo10[label="DOULBE"];
+        nodovalornodoprimitivo10[label="78.5"];
+        nodoprimitivo10 ->nodotiponodoprimitivo10;
+        nodotiponodoprimitivo10 ->nodovalornodoprimitivo10;
+        
+
+        nododeclarar36-> nodoauxdeclararz;
+nodoauxdeclararz-> nodotiponododeclarar36z;
+nodotiponododeclarar36z->nodotiposnododeclarar36z;
+nodotiposnododeclarar36z -> nodosisnododeclarar36z;
+nodosisnododeclarar36z-> nodosidsnododeclarar36z;
+nodoauxdeclararz ->nodoprimitivo10;
+
+        
+nodostatement25 -> nododeclarar36;
+ 
+        nododeclarar72[label ="DECLARAR"];
+        nodoauxdeclararxx[label ="DECLARAR"];
+nodotiponododeclarar72xx[label="TIPO"];
+nodotiposnododeclarar72xx[label=CARACTER];
+nodosisnododeclarar72xx[label="ID"];
+nodosidsnododeclarar72xx[label=xx]; 
+        nodoprimitivo23[label ="PRIMITIVO"];
+        nodotiponodoprimitivo23[label="CARACTER"];
+        nodovalornodoprimitivo23[label="a"];
+        nodoprimitivo23 ->nodotiponodoprimitivo23;
+        nodotiponodoprimitivo23 ->nodovalornodoprimitivo23;
+        
+
+        nododeclarar72-> nodoauxdeclararxx;
+nodoauxdeclararxx-> nodotiponododeclarar72xx;
+nodotiponododeclarar72xx->nodotiposnododeclarar72xx;
+nodotiposnododeclarar72xx -> nodosisnododeclarar72xx;
+nodosisnododeclarar72xx-> nodosidsnododeclarar72xx;
+nodoauxdeclararxx ->nodoprimitivo23;
+
+        
+nodostatement25 -> nododeclarar72;
+ 
+        nododeclarar11[label ="DECLARAR"];
+        nodoauxdeclararyy[label ="DECLARAR"];
+nodotiponododeclarar11yy[label="TIPO"];
+nodotiposnododeclarar11yy[label=BOOLEANO];
+nodosisnododeclarar11yy[label="ID"];
+nodosidsnododeclarar11yy[label=yy]; 
+        nodoprimitivo6[label ="PRIMITIVO"];
+        nodotiponodoprimitivo6[label="BOOLEANO"];
+        nodovalornodoprimitivo6[label="true"];
+        nodoprimitivo6 ->nodotiponodoprimitivo6;
+        nodotiponodoprimitivo6 ->nodovalornodoprimitivo6;
+        
+
+        nododeclarar11-> nodoauxdeclararyy;
+nodoauxdeclararyy-> nodotiponododeclarar11yy;
+nodotiponododeclarar11yy->nodotiposnododeclarar11yy;
+nodotiposnododeclarar11yy -> nodosisnododeclarar11yy;
+nodosisnododeclarar11yy-> nodosidsnododeclarar11yy;
+nodoauxdeclararyy ->nodoprimitivo6;
+
+        
+nodostatement25 -> nododeclarar11;
+ 
+        print18[label ="PRINT"];
+         
+        nodoaritmetica14[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica14[label="SUMA"];
+         
+        nodoprimitivo93[label ="PRIMITIVO"];
+        nodotiponodoprimitivo93[label="CADENA"];
+        nodovalornodoprimitivo93[label="tipo: "];
+        nodoprimitivo93 ->nodotiponodoprimitivo93;
+        nodotiponodoprimitivo93 ->nodovalornodoprimitivo93;
+        
+         
+        nodotypeof15[label ="TYPE OF"];
+        
+        nodoaritmetica14 ->nodoprimitivo93;
+        nodoaritmetica14 -> nodooperacionnodoaritmetica14;
+        nodoaritmetica14 ->nodotypeof15;
+        
+
+        print18->nodoaritmetica14;
+
+        
+nodostatement25 -> print18;
+ 
+        print82[label ="PRINT"];
+         
+        nodoaritmetica84[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica84[label="SUMA"];
+         
+        nodoprimitivo46[label ="PRIMITIVO"];
+        nodotiponodoprimitivo46[label="CADENA"];
+        nodovalornodoprimitivo46[label="tipo: "];
+        nodoprimitivo46 ->nodotiponodoprimitivo46;
+        nodotiponodoprimitivo46 ->nodovalornodoprimitivo46;
+        
+         
+        nodotypeof86[label ="TYPE OF"];
+        
+        nodoaritmetica84 ->nodoprimitivo46;
+        nodoaritmetica84 -> nodooperacionnodoaritmetica84;
+        nodoaritmetica84 ->nodotypeof86;
+        
+
+        print82->nodoaritmetica84;
+
+        
+nodostatement25 -> print82;
+ 
+        print13[label ="PRINT"];
+         
+        nodoaritmetica4[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica4[label="SUMA"];
+         
+        nodoprimitivo68[label ="PRIMITIVO"];
+        nodotiponodoprimitivo68[label="CADENA"];
+        nodovalornodoprimitivo68[label="tipo: "];
+        nodoprimitivo68 ->nodotiponodoprimitivo68;
+        nodotiponodoprimitivo68 ->nodovalornodoprimitivo68;
+        
+         
+        nodotypeof20[label ="TYPE OF"];
+        
+        nodoaritmetica4 ->nodoprimitivo68;
+        nodoaritmetica4 -> nodooperacionnodoaritmetica4;
+        nodoaritmetica4 ->nodotypeof20;
+        
+
+        print13->nodoaritmetica4;
+
+        
+nodostatement25 -> print13;
+ 
+        print72[label ="PRINT"];
+         
+        nodoaritmetica81[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica81[label="SUMA"];
+         
+        nodoprimitivo31[label ="PRIMITIVO"];
+        nodotiponodoprimitivo31[label="CADENA"];
+        nodovalornodoprimitivo31[label="tipo: "];
+        nodoprimitivo31 ->nodotiponodoprimitivo31;
+        nodotiponodoprimitivo31 ->nodovalornodoprimitivo31;
+        
+         
+        nodotypeof9[label ="TYPE OF"];
+        
+        nodoaritmetica81 ->nodoprimitivo31;
+        nodoaritmetica81 -> nodooperacionnodoaritmetica81;
+        nodoaritmetica81 ->nodotypeof9;
+        
+
+        print72->nodoaritmetica81;
+
+        
+nodostatement25 -> print72;
+ 
+        print24[label ="PRINT"];
+         
+        nodoaritmetica3[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica3[label="SUMA"];
+         
+        nodoprimitivo71[label ="PRIMITIVO"];
+        nodotiponodoprimitivo71[label="CADENA"];
+        nodovalornodoprimitivo71[label="tipo: "];
+        nodoprimitivo71 ->nodotiponodoprimitivo71;
+        nodotiponodoprimitivo71 ->nodovalornodoprimitivo71;
+        
+         
+        nodotypeof62[label ="TYPE OF"];
+        
+        nodoaritmetica3 ->nodoprimitivo71;
+        nodoaritmetica3 -> nodooperacionnodoaritmetica3;
+        nodoaritmetica3 ->nodotypeof62;
+        
+
+        print24->nodoaritmetica3;
+
+        
+nodostatement25 -> print24;
+ 
+        print17[label ="PRINT"];
+         
+        nodoprimitivo80[label ="PRIMITIVO"];
+        nodotiponodoprimitivo80[label="CADENA"];
+        nodovalornodoprimitivo80[label="------------------LENGTH-------------------"];
+        nodoprimitivo80 ->nodotiponodoprimitivo80;
+        nodotiponodoprimitivo80 ->nodovalornodoprimitivo80;
+        
+
+        print17->nodoprimitivo80;
+
+        
+nodostatement25 -> print17;
+ 
+        nododeclarar25[label ="DECLARAR"];
+        nodoauxdeclararcadena[label ="DECLARAR"];
+nodotiponododeclarar25cadena[label="TIPO"];
+nodotiposnododeclarar25cadena[label=CADENA];
+nodosisnododeclarar25cadena[label="ID"];
+nodosidsnododeclarar25cadena[label=cadena]; 
+        nodoprimitivo12[label ="PRIMITIVO"];
+        nodotiponodoprimitivo12[label="CADENA"];
+        nodovalornodoprimitivo12[label="soy una cadena"];
+        nodoprimitivo12 ->nodotiponodoprimitivo12;
+        nodotiponodoprimitivo12 ->nodovalornodoprimitivo12;
+        
+
+        nododeclarar25-> nodoauxdeclararcadena;
+nodoauxdeclararcadena-> nodotiponododeclarar25cadena;
+nodotiponododeclarar25cadena->nodotiposnododeclarar25cadena;
+nodotiposnododeclarar25cadena -> nodosisnododeclarar25cadena;
+nodosisnododeclarar25cadena-> nodosidsnododeclarar25cadena;
+nodoauxdeclararcadena ->nodoprimitivo12;
+
+        
+nodostatement25 -> nododeclarar25;
+ 
+        print35[label ="PRINT"];
+         
+        nodoaritmetica38[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica38[label="SUMA"];
+         
+        nodoprimitivo50[label ="PRIMITIVO"];
+        nodotiponodoprimitivo50[label="CADENA"];
+        nodovalornodoprimitivo50[label="tamaño: "];
+        nodoprimitivo50 ->nodotiponodoprimitivo50;
+        nodotiponodoprimitivo50 ->nodovalornodoprimitivo50;
+        
+         
+        nodolenght41[label ="LENGTH"];
+        
+        nodoaritmetica38 ->nodoprimitivo50;
+        nodoaritmetica38 -> nodooperacionnodoaritmetica38;
+        nodoaritmetica38 ->nodolenght41;
+        
+
+        print35->nodoaritmetica38;
+
+        
+nodostatement25 -> print35;
+ 
+        print16[label ="PRINT"];
+         
+        nodoprimitivo7[label ="PRIMITIVO"];
+        nodotiponodoprimitivo7[label="CADENA"];
+        nodovalornodoprimitivo7[label="------------------TOSTRING-------------------"];
+        nodoprimitivo7 ->nodotiponodoprimitivo7;
+        nodotiponodoprimitivo7 ->nodovalornodoprimitivo7;
+        
+
+        print16->nodoprimitivo7;
+
+        
+nodostatement25 -> print16;
+ 
+        nododeclarar61[label ="DECLARAR"];
+        nodoauxdeclararnumero[label ="DECLARAR"];
+nodotiponododeclarar61numero[label="TIPO"];
+nodotiposnododeclarar61numero[label=ENTERO];
+nodosisnododeclarar61numero[label="ID"];
+nodosidsnododeclarar61numero[label=numero]; 
+        nodoprimitivo50[label ="PRIMITIVO"];
+        nodotiponodoprimitivo50[label="ENTERO"];
+        nodovalornodoprimitivo50[label="105"];
+        nodoprimitivo50 ->nodotiponodoprimitivo50;
+        nodotiponodoprimitivo50 ->nodovalornodoprimitivo50;
+        
+
+        nododeclarar61-> nodoauxdeclararnumero;
+nodoauxdeclararnumero-> nodotiponododeclarar61numero;
+nodotiponododeclarar61numero->nodotiposnododeclarar61numero;
+nodotiposnododeclarar61numero -> nodosisnododeclarar61numero;
+nodosisnododeclarar61numero-> nodosidsnododeclarar61numero;
+nodoauxdeclararnumero ->nodoprimitivo50;
+
+        
+nodostatement25 -> nododeclarar61;
+ 
+        print52[label ="PRINT"];
+         
+        nodoaritmetica92[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica92[label="SUMA"];
+         
+        nodoprimitivo98[label ="PRIMITIVO"];
+        nodotiponodoprimitivo98[label="CADENA"];
+        nodovalornodoprimitivo98[label="tipo: "];
+        nodoprimitivo98 ->nodotiponodoprimitivo98;
+        nodotiponodoprimitivo98 ->nodovalornodoprimitivo98;
+        
+         
+        nodotypeof61[label ="TYPE OF"];
+        
+        nodoaritmetica92 ->nodoprimitivo98;
+        nodoaritmetica92 -> nodooperacionnodoaritmetica92;
+        nodoaritmetica92 ->nodotypeof61;
+        
+
+        print52->nodoaritmetica92;
+
+        
+nodostatement25 -> print52;
+ 
+        print45[label ="PRINT"];
+         
+        nodoaritmetica94[label ="ARITMETICA"];
+        nodooperacionnodoaritmetica94[label="SUMA"];
+         
+        nodoprimitivo73[label ="PRIMITIVO"];
+        nodotiponodoprimitivo73[label="CADENA"];
+        nodovalornodoprimitivo73[label="tipo: "];
+        nodoprimitivo73 ->nodotiponodoprimitivo73;
+        nodotiponodoprimitivo73 ->nodovalornodoprimitivo73;
+        
+         
+        nodotypeof92[label ="TYPE OF"];
+        
+        nodoaritmetica94 ->nodoprimitivo73;
+        nodoaritmetica94 -> nodooperacionnodoaritmetica94;
+        nodoaritmetica94 ->nodotypeof92;
+        
+
+        print45->nodoaritmetica94;
+
+        
+nodostatement25 -> print45;
+
+nodoIdFun813 -> nodostatement25;
+
+
+                   principal -> nodoInstFun813;
+
                    
-        nodofuncion22[label="FUNCION"];
+        nodomain82[label="MAIN"];
+        nodollamadanodomain82[label="LLAMADA"];
+        nodoIC807[label = "Llamada"];
+nodoCall807[label = "funcionesEspecialesYNativas"];
+nodoArg807[label = "Argumentos"];
+nodoIC807 -> nodoCall807;
+nodoCall807 -> nodoArg807;
+
+        nodomain82 -> nodollamadanodomain82;
+        nodollamadanodomain82 -> nodoIC807;
         
 
-                   principal -> nodofuncion22;
-
-                   
-        nodofuncion63[label="FUNCION"];
-        
-
-                   principal -> nodofuncion63;
-
-                   
-        nodomain71[label="MAIN"];
-        nodollamadanodomain71[label="LLAMADA"];
-        
-        nodomain71 -> nodollamadanodomain71;
-        nodollamadanodomain71 -> nodollamadafuncion48;
-        
-
-                   principal -> nodomain71;
+                   principal -> nodomain82;
 }

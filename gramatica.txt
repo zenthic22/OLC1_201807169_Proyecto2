@@ -1,0 +1,338 @@
+[ \r\t]+                                
+\n                                      
+(\/\/).*                                
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     
+
+//simbolos reservados
+"=="                'IGUALACION';
+";"                 'PUNTO_COMA';
+"("                 'PARIZQ';
+")"                 'PARDER';
+"."                 'PUNTO';
+":"                 'DOS_PUNTOS';
+","                 'COMA';
+"["                 'CORIZQ';
+"]"                 'CORDER';
+"{"                 'LLAVEIZQ';
+"}"                 'LLAVEDER';
+"?"                 'INTERROGACION';
+"="                 'IGUAL';
+
+//palabras reservadas del lenguaje
+"print"             'RPRINT';
+"true"              'TRUE';
+"false"             'FALSE';
+"new"               'NEW';
+"list"              'LIST';
+"add"               'ADD';
+"tolower"           'TOLOWER';
+"toupper"           'TOUPPER';
+"length"            'LENGTH';
+"if"                'IF';
+"else"              'ELSE';
+"switch"            'SWITCH';
+"case"              'CASE';
+"break"             'BREAK';
+"default"           'DEFAULT';
+"while"             'WHILE';
+"for"               'FOR';
+"do"                'DO';
+"void"              'VOID';
+"continue"          'CONTINUE';
+"return"            'RETURN';
+"truncate"          'TRUNCATE';
+"round"             'ROUND';
+"typeof"            'TYPEOF';
+"tostring"          'TOSTRING';
+"tochararray"       'TOCHARARRAY';
+"main"              'MAIN';
+
+//simbolos aritmeticos
+"+"                 'MAS';
+"-"                 'MENOS';
+"*"                 'POR';
+"/"                 'DIVISION';
+"^"                 'POTENCIA';
+"%"                 'MODULO';
+
+//simbolos relacionales
+"!="                'DIFERENCIACION';
+"<"                 'MENOR';
+"<="                'MENORIGUAL';
+">"                 'MAYOR';                 
+">="                'MAYORIGUAL';
+
+//simbolos logicos
+"&&"                'AND';
+"||"                'OR';
+"!"                 'NOT';
+
+//tipos de variables
+"int"               'RENTERO';
+"string"            'RSTRING';
+"char"              'RCHAR';
+"boolean"           'RBOOLEAN';
+"double"            'RDOUBLE';
+
+//expresiones regulares
+[a-zA-Z][a-zA-Z0-9_]*                   'ID';
+[0-9]+("."[0-9]+)\b                     'DECIMAL';
+[0-9]+\b                                'ENTERO';
+\'((\\\')|[^\n\'])*\'                   { yytext = yytext.substr(1, yyleng-2); return 'CARACTER'; }
+["]                                     { cadena = ""; this.begin("string"); }
+<string>[^"\\]+                         { cadena += yytext; }
+<string>"\\\""                          { cadena += "\""; }
+<string>"\\n"                           { cadena += "\n"; }
+<string>"\\t"                           { cadena += "\t"; }
+<string>"\\\\"                          { cadena += "\\"; }
+<string>"\\\'"                          { cadena += "\'"; }
+<string>["]                             { yytext = cadena; this.popState(); return 'CADENA'; }
+
+<<EOF>>                                 return 'EOF';
+
+.                                       { console.log('Error lexico: '+yytext+', en la linea: '+yylloc.first_line+', en la columna: '+yylloc.first_column); 
+                                          let err = new Error(yylloc.first_line, yylloc.first_column, 'Lexico', 'Error Lexico: '+yytext+"");
+                                          ListaError.push(err);  
+                                        }
+
+//precedencia de operadores
+'OR'
+'AND'
+'FCAST'
+'IGUALACION' 'DIFERENCIACION'
+'MENOR' 'MAYOR' 'MAYORIGUAL' 'MENORIGUAL'
+'MAS' 'MENOS'
+'POR' 'DIVISION' 'MODULO'
+'POTENCIA'
+'UMENOS' 'NOT'
+
+//gramatica del programa
+INICIO : INSTRUCCIONES EOF
+       ;
+
+INSTRUCCIONES : INSTRUCCIONES INSTRUCCION
+              | INSTRUCCION               
+              ;
+
+INSTRUCCION : DEFPRINT                
+            | DECLARACION              
+            | DECLARARARRAY            
+            | DECLARARLISTAS           
+            | ASIGNACION               
+            | ASIGNACIONARRAY          
+            | ASIGNACIONLISTA          
+            | MODIFICARLISTAS          
+            | SENTENCIAIF              
+            | SENTENCIASWITCH         
+            | CICLOWHILE               
+            | SENTENCIAFOR             
+            | SENTENCIADOWHILE         
+            | SENTENCIAFUNCION         
+            | LLAMADAFUNCION           
+            | RETORNAR PUNTO_COMA      
+            | BREAK PUNTO_COMA         
+            | CONTINUE PUNTO_COMA      
+            | MAIN LLAMADAFUNCION      
+            | error PUNTO_COMA        
+            ;
+
+//gramatica para la funcion imprimir
+DEFPRINT : RPRINT PARIZQ LISTAEXPRESION PARDER PUNTO_COMA   
+         ;
+
+LISTAEXPRESION : LISTAEXPRESION COMA EXPRESION      
+               | EXPRESION                          
+               ;
+
+//gramatica para la declaracion de variables
+/*
+- declaracion de variables con asignacion y sin asignacion
+- incluye el casteo de variables
+- declaracion de listas, vectores
+*/
+DECLARACION : TIPOS DECLARAVARIOS PUNTO_COMA                    
+            | TIPOS DECLARAVARIOS IGUAL EXPRESION PUNTO_COMA    
+            | TIPOS DECLARAVARIOS IGUAL TERNARIO PUNTO_COMA     
+            | TIPOS DECLARAVARIOS IGUAL CASTEO PUNTO_COMA      
+            | TIPOS DECLARAVARIOS IGUAL LLAMADAFUNCION          
+            ;
+
+DECLARARARRAY : TIPOS CORIZQ CORDER DECLARAVARIOS IGUAL NEW TIPOS CORIZQ EXPRESION CORDER PUNTO_COMA      
+              | TIPOS CORIZQ CORDER DECLARAVARIOS IGUAL LLAVEIZQ LISTAVALORES LLAVEDER PUNTO_COMA         
+              ;
+
+DECLARARLISTAS : LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL NEW LIST MENOR TIPOS MAYOR PUNTO_COMA          
+               | LIST MENOR TIPOS MAYOR DECLARAVARIOS IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA 
+               ;
+
+DECLARAVARIOS : DECLARAVARIOS COMA ID       
+              | ID                          
+              ;
+
+LISTAVALORES : LISTAVALORES COMA EXPRESION  
+             | EXPRESION                    
+             ;
+
+//gramatica para asignacion de variables ya declaradas
+ASIGNACION : ID IGUAL EXPRESION PUNTO_COMA      
+           | ID IGUAL TERNARIO PUNTO_COMA       
+           | ID IGUAL CASTEO PUNTO_COMA         
+           | ID IGUAL LLAMADAFUNCION            
+           | EXPRESION PUNTO_COMA               
+           ;
+
+ASIGNACION2 : ID IGUAL EXPRESION          
+            | ID IGUAL TERNARIO          
+            | ID IGUAL CASTEO             
+            ;
+
+ASIGNACIONARRAY : ID CORIZQ EXPRESION CORDER IGUAL EXPRESION PUNTO_COMA 
+                ;
+
+ASIGNACIONLISTA : ID PUNTO ADD PARIZQ EXPRESION PARDER PUNTO_COMA          
+                | ID IGUAL TOCHARARRAY PARIZQ EXPRESION PARDER PUNTO_COMA 
+                ;
+
+MODIFICARLISTAS : ID CORIZQ CORIZQ EXPRESION CORDER CORDER IGUAL EXPRESION PUNTO_COMA  
+                ;
+
+//gramatica para casteo de valores o variables
+CASTEO : PARIZQ TIPOCASTEO PARDER EXPRESION      
+       ;
+
+TIPOCASTEO : RENTERO        
+           | RDOUBLE        
+           | RCHAR          
+           ;
+
+TIPOS : RENTERO     
+      | RDOUBLE     
+      | RSTRING     
+      | RCHAR       
+      | RBOOLEAN    
+      ;
+
+//gramatica para la operacion ternaria
+TERNARIO : EXPRESION INTERROGACION EXPRESION DOS_PUNTOS EXPRESION       
+         ;
+
+//gramatica para la sentencia if
+SENTENCIAIF : IF PARIZQ EXPRESION PARDER STATEMENT SENTENCIAELSE   
+            ;
+
+SENTENCIAELSE : ELSE STATEMENT      
+              | ELSE SENTENCIAIF    
+              | 
+              ;
+
+STATEMENT : LLAVEIZQ INSTRUCCIONES LLAVEDER     
+          | LLAVEIZQ LLAVEDER                   
+          | error LLAVEDER                      
+          ;
+
+//gramatica para la sentencia switch case
+SENTENCIASWITCH : SWITCH PARIZQ EXPRESION PARDER LLAVEIZQ LISTACASOS LLAVEDER   
+                | error LLAVEDER
+                ;
+
+LISTACASOS : CASE EXPRESION DOS_PUNTOS CASESTATEMENT                
+           | LISTACASOS CASE EXPRESION DOS_PUNTOS CASESTATEMENT     
+           | DEFAULT DOS_PUNTOS CASESTATEMENT                       
+           | LISTACASOS DEFAULT DOS_PUNTOS CASESTATEMENT            
+           ;
+
+CASESTATEMENT : INSTRUCCIONES       
+              |                     
+              ;
+
+//gramatica para la sentencia while
+CICLOWHILE : WHILE PARIZQ EXPRESION PARDER STATEMENT        
+           ;
+
+//gramatica para la sentencia for
+SENTENCIAFOR : FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT       
+             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA EXPRESION PARDER STATEMENT        
+             | FOR PARIZQ DECLARACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT     
+             | FOR PARIZQ ASIGNACION EXPRESION PUNTO_COMA ASIGNACION2 PARDER STATEMENT      
+             ;
+
+//gramatica para la sentencia do-while
+SENTENCIADOWHILE : DO STATEMENT WHILE PARIZQ EXPRESION PARDER PUNTO_COMA    
+                 ;
+
+//gramatica para las funciones
+SENTENCIAFUNCION : TIPOS ID PARIZQ PARAMETROS PARDER STATEMENT      
+                 | TIPOS ID PARIZQ PARDER STATEMENT                 
+                 | VOID ID PARIZQ PARAMETROS PARDER STATEMENT       
+                 | VOID ID PARIZQ PARDER STATEMENT                  
+                 ;
+
+PARAMETROS : PARAMETROS COMA TIPOS ID       
+           | TIPOS ID                       
+           ;
+
+//gramatica para la llamada de funciones
+LLAMADAFUNCION : ID PARIZQ PARDER PUNTO_COMA                    
+               | ID PARIZQ LISTAPARAMETROS PARDER PUNTO_COMA    
+               ;
+
+LISTAPARAMETROS : LISTAPARAMETROS COMA EXPRESION    
+                | EXPRESION                         
+                ;
+
+//gramatica para retorno de variables, etc.
+RETORNAR : RETURN               
+         | RETURN EXPRESION     
+         ;
+
+//gramatica para las expresiones
+EXPRESION : EXPRESION MAS EXPRESION                 
+          | EXPRESION MENOS EXPRESION               
+          | EXPRESION POR EXPRESION                 
+          | EXPRESION DIVISION EXPRESION            
+          | EXPRESION POTENCIA EXPRESION            
+          | EXPRESION MODULO EXPRESION              
+          | MENOS EXPRESION %prec UMENOS            
+
+          | EXPRESION IGUALACION EXPRESION         
+          | EXPRESION DIFERENCIACION EXPRESION      
+          | EXPRESION MENOR EXPRESION               
+          | EXPRESION MAYOR EXPRESION               
+          | EXPRESION MENOR IGUAL EXPRESION         
+          | EXPRESION MAYOR IGUAL EXPRESION         
+
+          | EXPRESION AND EXPRESION                    
+          | EXPRESION OR EXPRESION                  
+          | NOT EXPRESION %prec NOT                   
+
+          | EXPRESION MAS MAS                           
+          | EXPRESION MENOS MENOS                       
+             
+          | PARIZQ EXPRESION PARDER                     
+          | ENTERO                                      
+          | DECIMAL                                     
+          | CADENA                                      
+          | CARACTER                                    
+          | TRUE                                        
+          | FALSE                                       
+
+          | ACCEDERVAR                                  
+          | ACCEDERARRAY                                
+          | ACCEDERLISTA                                
+          | TOLOWER PARIZQ EXPRESION PARDER             
+          | TOUPPER PARIZQ EXPRESION PARDER             
+          | LENGTH PARIZQ EXPRESION PARDER              
+          | TRUNCATE PARIZQ EXPRESION PARDER            
+          | ROUND PARIZQ EXPRESION PARDER               
+          | TYPEOF PARIZQ EXPRESION PARDER              
+          | TOSTRING PARIZQ EXPRESION PARDER            
+          ;
+
+ACCEDERVAR : ID 
+           ;
+
+ACCEDERARRAY : ID CORIZQ EXPRESION CORDER 
+             ;
+
+ACCEDERLISTA : ID CORIZQ CORIZQ EXPRESION CORDER CORDER 
+             ;

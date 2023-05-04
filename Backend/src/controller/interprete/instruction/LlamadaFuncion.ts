@@ -55,11 +55,22 @@ export class LlamadaFuncion extends Instruction {
     }
 
     public getAST(): { codigorama: string; nombrenodo: string; } {
-        const aleatorio = Math.floor(Math.random()*(100-0)+0);
-        let nombreNodoP = "nodollamadafuncion"+aleatorio.toString();
+        const id = Math.floor(Math.random()*(1000-0)+0);
+      //generar el nombre del nodo
+      const nodoPrincipal = `nodoCall${id.toString()}`;
+      const nodoArg = `nodoArg${id.toString()}`;
+      const nodoCall = `nodoIC${id.toString()}`;
+      let ramaCall = `${nodoCall}[label = "Llamada"];\n`;
+      ramaCall += `${nodoPrincipal}[label = "${this.id}"];\n`;
+      ramaCall += `${nodoArg}[label = "Argumentos"];\n`;
+      ramaCall += `${nodoCall} -> ${nodoPrincipal};\n`;
+      ramaCall += `${nodoPrincipal} -> ${nodoArg};\n`;
+      for(let i = 0; i < this.argumentos.length; i++){
+        const codigoArg : { codigorama: string, nombrenodo: string } = this.argumentos[i].getAST();
+        ramaCall += codigoArg.codigorama + "\n";
+        ramaCall += `${nodoArg} -> ${codigoArg.nombrenodo};\n`;
+      }
 
-        const codigorama = ``
-
-        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
+      return {codigorama: ramaCall, nombrenodo: nodoCall}
     }
 }

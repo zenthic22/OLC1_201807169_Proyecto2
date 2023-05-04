@@ -27,26 +27,30 @@ export class Funcion extends Instruction {
     }
 
     public getAST(): { codigorama: string; nombrenodo: string; } {
-        const aleatorio = Math.floor(Math.random()*(100-0)+0);
-        let nombreNodoP = "nodofuncion"+aleatorio.toString();
+        const id = Math.floor(Math.random()*(1000-0)+0);
+        const nodoPrincipal = `nodoInstFun${id.toString()}`;
+        const nodoId = `nodoIdFun${id.toString()}`;
+        const nodoParam = `nodoPFun${id.toString()}`;
+        const nodoTipo = `nodoTFun${id.toString()}`;
 
-        let ids = "";
-        let declaracion = "";
+        const codigoInst: { codigorama: string, nombrenodo: string } = this.statement.getAST();
 
-        var param = { codigorama:"nodo", nombrenodo:"nodo[label=\"sinparametros\"]" }
-
-        if(this.statement) {
-            param = this.statement.getAST();
+        let ramaParam = `${nodoPrincipal}[label = "Declarar"];\n`;
+        ramaParam += `${nodoTipo}[label = "Tipo"];\n`;
+        ramaParam += `${nodoId}[label = "${this.id}"];\n`;
+        ramaParam += `${nodoParam}[label = "Parametros"];\n`;
+        ramaParam += `${nodoPrincipal} -> ${nodoTipo};\n`;
+        ramaParam += `${nodoPrincipal} -> ${nodoId};\n`;
+        ramaParam += `${nodoId} -> ${nodoParam};\n`;
+        
+        for(let i = 0; i<this.parametros.length; i++){
+            const codigoParam: { rama: string, nodo: string } = this.parametros[i];
+            ramaParam += codigoParam.rama + "\n";
+            ramaParam += `${nodoParam} -> ${codigoParam.nodo};\n`;
         }
 
-        for(const actual of this.parametros) {
-            ids += "nodoauxfuncion"+actual+"[label=\"PARAMETROS FUNCION\"];\n";
-        }
-
-        const codigorama = `
-        ${nombreNodoP}[label="FUNCION"];
-        `
-
-        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
+        ramaParam += codigoInst.codigorama + "\n";
+        ramaParam += `${nodoId} -> ${codigoInst.nombrenodo};\n`;
+        return {codigorama: ramaParam, nombrenodo: nodoPrincipal.toString()}
     }
 }

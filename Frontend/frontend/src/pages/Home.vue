@@ -8,7 +8,9 @@
         data() {
           return {
             tabla:[],
-            errores:[]
+            errores:[],
+            tecnicoUrl:"C:/Users/rober/OneDrive/Documentos/Github/OLC1_201807169_Proyecto2/Documentacion/Manual tecnico.pdf",
+            usuarioUrl:"C:/Users/rober/OneDrive/Documentos/Github/OLC1_201807169_Proyecto2/Documentacion/Manual de Usuario.pdf",
           }
         },
 
@@ -361,8 +363,8 @@
     <p class="w3-opacity w3-center">Para una guia rapida te recomiendo que lo leas detenidamente</p>
     <div class="w3-row w3-padding-32">
       <div class="w3-col m6 w3-large w3-margin-bottom">
-        <i class="fa fa-map-marker" style="width:30px"></i><a href="#usuario">Manual de Usuario</a><br>
-        <i class="fa fa-map-marker" style="width:30px"></i><a href="#tecnico">Manual Tecnico</a>
+        <i class="fa fa-map-marker" style="width:30px"></i><a :href="usuarioUrl" target="_blank">Manual de Usuario</a><br>
+        <i class="fa fa-map-marker" style="width:30px"></i><a :href="tecnicoUrl" target="_blank">Manual Tecnico</a>
       </div>
     </div>
   </div>
