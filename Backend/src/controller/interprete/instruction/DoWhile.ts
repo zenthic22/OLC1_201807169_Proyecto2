@@ -2,6 +2,9 @@ import { Expression } from '../abstract/Expression';
 import { Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 import { Instruction } from '../abstract/Instruction';
+import { Union } from '../utils/Union';
+
+let contador:number = 0;
 
 export class DoWhile extends Instruction {
     constructor(
@@ -39,5 +42,26 @@ export class DoWhile extends Instruction {
             let err = console.log("limite de iteraciones While");
             throw err;
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nododowhile"+aleatorio.toString();
+        const instru: { codigorama:string, nombrenodo:string } = this.cuerpo.getAST();
+        const cond: { codigorama:string, nombrenodo:string } = this.condicion.getAST();
+
+        const codigorama = `
+        ${nombreNodoP}[label="DO WHILE"];
+        nodocondicion${nombreNodoP}[label="CONDICION"];
+        nodoinstruccion${nombreNodoP}[label="INSTRUCCION"];
+        ${cond.codigorama}
+        ${instru.codigorama}
+        ${nombreNodoP} -> nodocondicion${nombreNodoP};
+        nodocondicion${nombreNodoP} -> ${cond.nombrenodo};
+        ${nombreNodoP} -> nodoinstruccion${nombreNodoP};
+        nodoinstruccion${nombreNodoP} -> ${instru.nombrenodo};
+        `
+
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
     }
 }

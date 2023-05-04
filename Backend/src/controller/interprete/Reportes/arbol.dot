@@ -1,0 +1,25 @@
+digraph G {
+principal[label="AST"];
+
+                   
+        nodofuncion22[label="FUNCION"];
+        
+
+                   principal -> nodofuncion22;
+
+                   
+        nodofuncion63[label="FUNCION"];
+        
+
+                   principal -> nodofuncion63;
+
+                   
+        nodomain71[label="MAIN"];
+        nodollamadanodomain71[label="LLAMADA"];
+        
+        nodomain71 -> nodollamadanodomain71;
+        nodollamadanodomain71 -> nodollamadafuncion48;
+        
+
+                   principal -> nodomain71;
+}

@@ -17,4 +17,8 @@ export class Metodo extends Instruction {
     public execute(env: Environment) {
         
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        return { codigorama:"", nombrenodo:"" }
+    }
 }

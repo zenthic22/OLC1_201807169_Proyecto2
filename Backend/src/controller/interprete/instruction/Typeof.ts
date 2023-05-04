@@ -3,6 +3,8 @@ import { Instruction } from '../abstract/Instruction';
 import { Environment } from '../abstract/Environment';
 import { Type } from '../abstract/Return';
 
+let contador:number = 0;
+
 export class Typeof extends Instruction {
     private value: Expression;
 
@@ -40,5 +42,14 @@ export class Typeof extends Instruction {
         } catch(error) {
             throw "error en typeof";
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodotypeof"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="TYPE OF"];
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

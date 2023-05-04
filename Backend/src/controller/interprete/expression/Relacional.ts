@@ -35,4 +35,21 @@ export class Relacional extends Expression {
             throw err;
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoaritmetica"+aleatorio.toString();
+        const exiz:{codigorama:string ,nombrenodo:string} =this.izquierdo.getAST();
+        const exder:{codigorama:string ,nombrenodo:string} =this.derecho.getAST();
+        const codigorama =` 
+        ${nombreNodoP}[label ="RELACIONAL"];
+        nodooperacion${nombreNodoP}[label="${this.tipo.toString()}"];
+        ${exiz.codigorama}
+        ${exder.codigorama}
+        ${nombreNodoP} ->${exiz.nombrenodo};
+        ${nombreNodoP} -> nodooperacion${nombreNodoP};
+        ${nombreNodoP} ->${exder.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

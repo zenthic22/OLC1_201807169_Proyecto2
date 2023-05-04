@@ -1,7 +1,12 @@
 import { Instruction } from "../abstract/Instruction";
 import { Environment } from "../abstract/Environment";
 import { Expression } from "../abstract/Expression";
+import { Error } from "../Error/Error";
+import { ListaError } from "../Reports/ListaError";
 import { Type } from "../abstract/Return";
+import { Union } from "../utils/Union";
+
+let contador:number = 0;
 
 export class Asignar extends Instruction {
     private id: string;
@@ -31,9 +36,22 @@ export class Asignar extends Instruction {
                 variableOriginal.valor = nuevoValor.value;
             } else if(variableOriginal.type == nuevoValor.type) {
                 variableOriginal.valor = nuevoValor.value;
-            } else {
-                console.log("error");
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoasignacion"+aleatorio.toString();
+        const val:{codigorama:string ,nombrenodo:string} =this.value.getAST();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ASIGNAR"];
+        nodoIDS${nombreNodoP}[label="ID"];
+        nodoid${nombreNodoP}[label="${this.id}"];
+        ${val.codigorama}
+        ${nombreNodoP} ->nodoIDS${nombreNodoP} ->nodoid${nombreNodoP};
+        ${nombreNodoP}->${val.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

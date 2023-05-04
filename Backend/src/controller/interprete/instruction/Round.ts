@@ -3,6 +3,8 @@ import { Expression } from '../abstract/Expression';
 import { Environment } from '../abstract/Environment';
 import { Type } from '../abstract/Return';
 
+let contador:number = 0;
+
 export class Round extends Instruction {
     private value: Expression;
 
@@ -25,5 +27,14 @@ export class Round extends Instruction {
         } catch (error) {
             throw "error en funcion round";
         }   
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoround"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ROUND"];
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

@@ -2,14 +2,30 @@
     import Component from '../components/Component.vue';
     import Component1 from '../components/Component1.vue';
     import axios from 'axios';
+    import 'd3-graphviz'
 
     export default {
+        data() {
+          return {
+            tabla:[],
+            errores:[]
+          }
+        },
+
         components: {
           Component,
           Component1
         },
 
         methods: {
+            setTabla(nuevoValor) {
+              this.tabla = nuevoValor;
+            },
+
+            setErrores(nuevoValor) {
+              this.errores = nuevoValor;
+            },
+
             cargarArchivo(event) {
               const archivo = event.target.files[0];
               const lector = new FileReader();
@@ -37,11 +53,30 @@
                   })
             },
 
+            enviar_tabla() {
+              axios
+                .post("http://localhost:5000/route/TablaSimbolos", {tabla: this.tabla})
+                .then(response => {
+                    this.setTabla(response.data["tabla"]);
+                });
+            },
+
+            enviar_errores() {
+              axios
+                .post("http://localhost:5000/route/ReporteErrores", {lexicos: this.errores})
+                .then(response => {
+                    this.setErrores(response.data["lexicos"]);
+                });
+                
+            },
+
             limpiar() {
-              const input = ace.edit("editor");
               const salida = ace.edit("salida");
-              input.setValue("");
-              salida.setValue("");
+              axios
+                .post("http://localhost:5000/route/reset", {consola: salida})
+                .then((response) => {
+                  salida.setValue(response.data["consola"]);
+                })
             },
 
             myFunction() {
@@ -53,7 +88,7 @@
               }
             }
         },
-    }
+    };
 </script>
 
 <style>
@@ -159,6 +194,28 @@
     color: #bcb15f;
   }
 
+  .btn-error {
+    width: 20%;
+    background-color: #000000;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 2px rgba(48, 124, 211, 0.7);
+    margin-top: 20px;
+    margin-left: 405px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    color: aqua;
+  }
+
+  #graph-body {
+    border: 2px solid white;
+    width: 100%;
+    height: 650px;
+    padding: 10px;
+    margin-left: 10px;
+  }
+
 </style>
 
 <template>
@@ -250,17 +307,18 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">{}</th>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>4</td>
+                <tr v-for="(errores, index) in errores" :key="index">
+                  <th scope="row">{index+1}</th>
+                  <td>{{ errores.tipo }}</td>
+                  <td>{{ errores.descripcion }}</td>
+                  <td>{{ errores.line }}</td>
+                  <td>{{ errores.column }}</td>
                 </tr>
               </tbody>
             </table>
           </center>
       </div>
+      <button type="button" class="btn btn-error" v-on:click="enviar_errores()">Reporte de Errores</button>
       <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
         <p class="w3-opacity w3-center"><b>TABLA DE SIMBOLOS</b></p>
         <center>
@@ -277,24 +335,24 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">{}</th>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>4</td>
-                <td>5</td>
+              <tr v-for="(tabla, index) in tabla" :key="index">
+                <th scope="row">{index+1}</th>
+                <td>{{ tabla.id }}</td>
+                <td>{{ tabla.tipo1 }}</td>
+                <td>{{ tabla.tipo2 }}</td>
+                <td>{{ tabla.ambito }}</td>
+                <td>{{ tabla.linea }}</td>
+                <td>{{ tabla.columna }}</td>
               </tr>
             </tbody>
           </table>
         </center>
       </div>
+      <button type="button" class="btn btn-info" v-on:click="enviar_tabla()">Tabla de Simbolos</button>
       <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
         <p class="w3-opacity w3-center"><b>ARBOL AST</b></p>
-        <div id="graph-body"></div>
+        <img src="../assets/arbol.png">
       </div>
-      <button type="button" class="btn btn-info">Graficar AST</button>
     </div>
   </div>
   <!--Seccion de Documentacion-->

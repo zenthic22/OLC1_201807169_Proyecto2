@@ -3,6 +3,8 @@ import { Instruction } from '../abstract/Instruction';
 import { Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 
+let contador:number = 0;
+
 export class ToString extends Instruction {
     private value: Expression;
 
@@ -26,5 +28,14 @@ export class ToString extends Instruction {
         } catch(error) {
             throw "error en funcion tostring";
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodotostring"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="TO STRING"];
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

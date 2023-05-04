@@ -2,6 +2,9 @@ import { Expression } from "../abstract/Expression";
 import { Instruction } from "../abstract/Instruction";
 import { Environment } from "../abstract/Environment";
 import { Type } from "../abstract/Return";
+import { Union } from "../utils/Union";
+
+let contador:number = 0;
 
 export class DeclararVector extends Instruction {
     private id: string[];
@@ -45,5 +48,45 @@ export class DeclararVector extends Instruction {
                 env.guardar(actual,this.value,this.tipo,this.line,this.column,tam,Type.VECTOR);
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let tipo = "BOOLEAN";
+        if(this.tipo == 4) {
+            tipo = "STRING";
+        } else if(this.tipo == 0) {
+            tipo = "INT";
+        } else if(this.tipo == 1) {
+            tipo = "DOUBLE";
+        } else if(this.tipo == 3) {
+            tipo = "CHAR";
+        }
+        let ids = "";
+        let declaraciones = "";
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nododeclararvector"+aleatorio.toString();
+        var val = {codigorama:"nodo",nombrenodo:"nodo[label =\"sinvalor\"]"}
+        for (const actual of this.id) {
+            ids += "nodoauxdeclarar"+actual+"[label =\"DECLARARVECTOR\"];\n";
+            ids += "nodotipo"+nombreNodoP+actual+"[label=\"TIPO\"];\n";
+            ids += "nodotipos"+nombreNodoP+actual+"[label="+tipo+"];\n";
+            ids +="nodosis"+nombreNodoP+actual+"[label=\"ID\"];\n";
+            ids +="nodosids"+nombreNodoP+actual+"[label="+actual+"];";
+            ids += val.codigorama+"\n";
+
+            declaraciones +=nombreNodoP +"-> nodoauxdeclarar"+actual+";\n";
+            declaraciones +="nodoauxdeclarar"+actual+"-> nodotipo"+nombreNodoP+actual+";\n";
+            declaraciones +="nodotipo"+nombreNodoP+actual+"->nodotipos"+nombreNodoP+actual+";\n";
+            declaraciones +="nodotipos"+nombreNodoP+actual+" -> nodosis"+nombreNodoP+actual+";\n";
+            declaraciones +="nodosis"+nombreNodoP+actual+"-> nodosids"+nombreNodoP+actual+";\n";
+            declaraciones +="nodoauxdeclarar"+actual+" ->"+ val.nombrenodo+";\n";
+        }
+
+        const codigorama =` 
+        ${nombreNodoP}[label ="DECLARARVECTOR"];
+        ${ids}
+        ${declaraciones}
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

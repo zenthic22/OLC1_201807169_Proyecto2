@@ -11,6 +11,8 @@ export abstract class Expression {
 
     public abstract execute(env: Environment): Return;
 
+    public abstract getAST(): { codigorama:string, nombrenodo:string };
+
     public tipoDominante(tipo1: Type, tipo2: Type, operacion:number): Type {
         if(operacion ==1){
             return tipos_suma[tipo1][tipo2];

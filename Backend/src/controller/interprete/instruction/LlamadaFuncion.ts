@@ -2,6 +2,8 @@ import { Expression } from '../abstract/Expression';
 import { Environment } from '../abstract/Environment';
 import { Instruction } from '../abstract/Instruction';
 
+let contador:number = 0;
+
 export class LlamadaFuncion extends Instruction {
     constructor(
         private id: string,
@@ -50,5 +52,14 @@ export class LlamadaFuncion extends Instruction {
                 throw "es necesario un retorno";
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nodollamadafuncion"+aleatorio.toString();
+
+        const codigorama = ``
+
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
     }
 }

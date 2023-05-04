@@ -3,6 +3,8 @@ import { Expression } from '../abstract/Expression';
 import { Environment } from '../abstract/Environment';
 import { Type } from '../abstract/Return';
 
+let contador:number = 0;
+
 export class Casteo extends Instruction {
     private value: Expression;
     private cast: number;
@@ -62,5 +64,30 @@ export class Casteo extends Instruction {
                 return { value: String.fromCharCode(val.value).toString(), type: this.cast }
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let tipo = "BOOLEANO";
+        if (this.cast == 4){
+            tipo ="CADENA";
+        }else if (this.cast == 0) {
+            tipo ="ENTERO";
+        } else if (this.cast== 1) {
+            tipo ="DOULBE";
+        } else if (this.cast == 3) {
+            tipo ="CARACTER";
+        }
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodocasteo"+aleatorio.toString();
+        const val:{codigorama:string ,nombrenodo:string}=this.value.getAST();
+        
+        
+        const codigorama =` 
+        ${nombreNodoP}[label ="CAST"];
+        nodotipo${nombreNodoP}[label="${tipo}"];
+        ${val.codigorama}
+        ${nombreNodoP} -> nodotipo${nombreNodoP} ->${val.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

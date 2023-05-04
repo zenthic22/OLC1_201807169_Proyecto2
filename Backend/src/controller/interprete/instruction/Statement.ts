@@ -1,5 +1,9 @@
 import { Environment } from '../abstract/Environment';
 import { Instruction } from '../abstract/Instruction';
+import { Union } from '../utils/Union';
+import { Funcion } from './Funcion';
+
+let contador:number = 0;
 
 export class Statement extends Instruction {
     constructor(
@@ -14,13 +18,30 @@ export class Statement extends Instruction {
         const nuevoAmbito = new Environment(env);
         for(const inst of this.code) {
             try {
-                const element = inst.execute(nuevoAmbito);
-                if(element != null && element != undefined) {
-                    return element;
+                const ret = inst.execute(nuevoAmbito);
+                if(ret != null && ret != undefined) {
+                    return ret;
                 }
-            } catch(error) {
-                console.log(error);
+            } catch(e) {
+                console.log(e);
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nodostatement"+aleatorio.toString();
+
+        let bloque = "";
+
+        for(const actual of this.code) {
+            bloque += "nodoauxstatement"+actual+"[label=\"BLOQUE\"];\n";
+
+        }
+
+        const codigorama = `
+            ${nombreNodoP}[label="STATEMENT"];
+            `
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
     }
 }

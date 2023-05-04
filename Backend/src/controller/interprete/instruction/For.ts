@@ -3,6 +3,8 @@ import { Type } from '../abstract/Return';
 import { Environment } from '../abstract/Environment';
 import { Instruction } from '../abstract/Instruction';
 
+let contador:number = 0;
+
 export class For extends Instruction {
     private Declaracion1:Expression;
     private condicion: Expression;
@@ -55,5 +57,36 @@ export class For extends Instruction {
             this.incremento.execute(env);
             contador++;
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nodo_for"+aleatorio.toString();
+
+        const declaracion: { codigorama:string, nombrenodo:string } = this.Declaracion1.getAST();
+        const cond: { codigorama: string, nombrenodo:string } = this.condicion.getAST();
+        const incre: { codigorama: string, nombrenodo:string } = this.incremento.getAST();
+        const instru: { codigorama: string, nombrenodo:string } = this.cuerpo.getAST();
+
+        const codigorama = `
+        ${nombreNodoP}[label="FOR"];
+        nododeclaracion${nombreNodoP}[label="DECLARACION"];
+        nodocondicion${nombreNodoP}[label="CONDICION"];
+        nodoincremento${nombreNodoP}[label="INCREMENTO"];
+        nodoinstruccion${nombreNodoP}[label="INSTRUCCION"];
+        ${declaracion.codigorama}
+        ${cond.codigorama}
+        ${incre.codigorama}
+        ${instru.codigorama}
+        ${nombreNodoP} -> nododeclaracion${nombreNodoP};
+        nododeclaracion${nombreNodoP} -> ${declaracion.nombrenodo};
+        ${nombreNodoP} -> nodocondicion${nombreNodoP};
+        nodocondicion${nombreNodoP} -> ${cond.nombrenodo};
+        ${nombreNodoP} -> nodoincremento${nombreNodoP};
+        nodoincremento${nombreNodoP} -> ${incre.nombrenodo};
+        ${nombreNodoP} -> nodoinstruccion${nombreNodoP};
+        nodoinstruccion${nombreNodoP} -> ${instru.nombrenodo};
+        `
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
     }
 }

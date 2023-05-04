@@ -97,11 +97,15 @@
 
 <<EOF>>                                 return 'EOF';
 
-.                                       { console.log('Error lexico: '+yytext+', en la linea: '+yylloc.first_line+', en la columna: '+yylloc.first_column); }
+.                                       { console.log('Error lexico: '+yytext+', en la linea: '+yylloc.first_line+', en la columna: '+yylloc.first_column); 
+                                          let err = new Error(yylloc.first_line, yylloc.first_column, 'Lexico', 'Error Lexico: '+yytext+"");
+                                          ListaError.push(err);  
+                                        }
 
 /lex
 
 %{
+    const { Error } = require('./Error/Error');
     const { Type } = require('./abstract/Return');
     const { TipoPrimitivo } = require('./utils/TipoPrimitivo');
     const { TipoAritmetica } = require('./utils/TipoAritmetica');
@@ -147,6 +151,7 @@
     const { ToLower } = require('./instruction/ToLower');
     const { ToUpper } = require('./instruction/ToUpper');
     const { Main } = require('./instruction/Main');
+    const { ListaError } = require('./Reports/ListaError');
 %}
 
 //precedencia de operadores
@@ -191,6 +196,9 @@ INSTRUCCION : DEFPRINT                 { $$ = $1; }
             | BREAK PUNTO_COMA         { $$ = new Break(@1.first_line, @1.first_column); }
             | CONTINUE PUNTO_COMA      { $$ = new Continue(@1.first_line, @1.first_column); }
             | MAIN LLAMADAFUNCION      { $$ = new Main($2, @1.first_line, @1.first_column); }
+            | error PUNTO_COMA         { err = new Error(this._$.first_line, this._$.first_column, 'Sintactico', 'Error Sintactico: '+yytext);
+                                         ListaError.push(err);
+                                       }
             ;
 
 //gramatica para la funcion imprimir
@@ -284,11 +292,16 @@ SENTENCIAELSE : ELSE STATEMENT      { $$ = $2; }
 
 STATEMENT : LLAVEIZQ INSTRUCCIONES LLAVEDER     { $$ = new Statement($2, @1.first_line, @1.first_column); }
           | LLAVEIZQ LLAVEDER                   { $$ = new Statement([], @1.first_line, @1.first_column); }
-          | error LLAVEDER                      { console.log('Error sintactico: '+yytext+', en la linea: '+this._$.first_line+', en la columna: '+this._$.first_column); }
+          | error LLAVEDER                      { err = new Error(this._$.first_line, this._$.first_column, 'Sintactico', 'Error Sintactico: '+yytext);
+                                                  ListaError.push(err);
+                                                }
           ;
 
 //gramatica para la sentencia switch case
 SENTENCIASWITCH : SWITCH PARIZQ EXPRESION PARDER LLAVEIZQ LISTACASOS LLAVEDER   { $$ = new SwitchCase($3,$6,@1.first_line, @1.first_column); }
+                | error LLAVEDER { err = new Error(this._$.first_line, this._$.first_column, 'Sintactico', 'Error sintactico: '+yytext); 
+                                   ListaError.push(err);
+                                 }
                 ;
 
 LISTACASOS : CASE EXPRESION DOS_PUNTOS CASESTATEMENT                { $$ = []; $$.push([$2, $4]); }

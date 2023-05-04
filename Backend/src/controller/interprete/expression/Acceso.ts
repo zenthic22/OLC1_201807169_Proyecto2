@@ -17,4 +17,15 @@ export class Acceso extends Expression {
             return { value: null, type: Type.NULL }
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoacceso"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ACCESO"];
+        nodoval${nombreNodoP}[label="${this.id}"];
+        ${nombreNodoP} -> nodoval${nombreNodoP};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

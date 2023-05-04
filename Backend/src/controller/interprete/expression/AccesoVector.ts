@@ -35,4 +35,16 @@ export class AccesoVector extends Expression {
             throw "ojo";
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoaccesovector"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ACCESOVECTOR"];
+        nodoval_vector${nombreNodoP}[label="${this.id}"];
+        nodopos_vec${nombreNodoP}[label="${this.posicion}"];
+        ${nombreNodoP} -> nodoval${nombreNodoP} -> nodopos_vec${nombreNodoP};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

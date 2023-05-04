@@ -2,15 +2,17 @@ import { Simbolo } from './Symbol';
 import { Type } from './Return';
 import { printlist } from '../Reports/PrintList';
 import { Funcion } from '../instruction/Funcion';
+import { ListaTabla } from '../Reports/ListaTabla';
+import { TablaSimbolos } from './TablaSimbolos';
 
 export class Environment {
-    private variables = new Map<string, Simbolo>; //mapa de variables
-    private funciones = new Map<string, Funcion>; //mapa de funciones
+    private variables = new Map<string, Simbolo>(); //mapa de variables
+    private funciones = new Map<string, Funcion>(); //mapa de funciones
 
     //constructor
     constructor(private anterior: Environment | null) {
-        this.variables = new Map();
-        this.funciones = new Map();
+        this.variables = new Map<string, Simbolo>();
+        this.funciones = new Map<string, Funcion>();
     }
 
     //guardar un arreglo
@@ -41,6 +43,11 @@ export class Environment {
             // guardar la variable
             // guardar la variable en una tabla de simbolos para el reporte
             env.variables.set(id.toLowerCase(), new Simbolo(valor, id, tipo, tam, edd));
+            if(edd != undefined) {
+                this.guardarlistatabla(id, tipo, edd, "ambito", linea, columna);
+            } else {
+                this.guardarlistatabla(id, tipo, 10, "ambito", linea, columna);
+            }
         }
     }
 
@@ -64,6 +71,7 @@ export class Environment {
         let env: Environment | null = this;
         if(!env.funciones.has(id.toLowerCase())) {
             this.funciones.set(id.toLowerCase(), funcion);
+            this.guardarlistatabla(id, type, subr, "--", line, column);
         }
     }
 
@@ -85,4 +93,58 @@ export class Environment {
         }
         return env;
     } 
-}
+
+    public guardarlistatabla(id:string, tipo1:number, tipo2:number, ambito:string, linea:number, columna:number) {
+        if(tipo2 == 6) {
+            if(tipo1 == 4) {
+                ListaTabla.push(new TablaSimbolos(id, "STRING", "VECTOR", ambito, linea, columna));
+            } else if(tipo1 == 2) {
+                ListaTabla.push(new TablaSimbolos(id, "BOOLEAN", "VECTOR", ambito, linea, columna));
+            } else if(tipo1 == 1) {
+                ListaTabla.push(new TablaSimbolos(id, "DOUBLE", "VECTOR", ambito, linea, columna));
+            } else if(tipo1 == 3) {
+                ListaTabla.push(new TablaSimbolos(id, "CHAR", "VECTOR", ambito, linea, columna));
+            } else {
+                ListaTabla.push(new TablaSimbolos(id, "INT", "VECTOR", ambito, linea, columna));
+            }
+        } else if(tipo2 == 7) {
+            if(tipo1 == 4) {
+                ListaTabla.push(new TablaSimbolos(id, "STRING", "LISTA", ambito, linea, columna));
+            } else if(tipo1 == 2) {
+                ListaTabla.push(new TablaSimbolos(id, "BOOLEAN", "LISTA", ambito, linea, columna));
+            } else if(tipo1 == 1) {
+                ListaTabla.push(new TablaSimbolos(id, "DOUBLE", "LISTA", ambito, linea, columna));
+            } else if(tipo1 == 3) {
+                ListaTabla.push(new TablaSimbolos(id, "CHAR", "LISTA", ambito, linea, columna));
+            } else {
+                ListaTabla.push(new TablaSimbolos(id, "INT", "LISTA", ambito, linea, columna));
+            }
+        } else if(tipo2 == 8) {
+            if(tipo1 == 4) {
+                ListaTabla.push(new TablaSimbolos(id, "STRING", "FUNCION", ambito, linea, columna));
+            } else if(tipo1 == 2) {
+                ListaTabla.push(new TablaSimbolos(id, "BOOLEAN", "FUNCION", ambito, linea, columna));
+            } else if(tipo1 == 1) {
+                ListaTabla.push(new TablaSimbolos(id, "DOUBLE", "FUNCION", ambito, linea, columna));
+            } else if(tipo1 == 3) {
+                ListaTabla.push(new TablaSimbolos(id, "CHAR", "FUNCION", ambito, linea, columna));
+            } else {
+                ListaTabla.push(new TablaSimbolos(id, "INT", "FUNCION", ambito, linea, columna));
+            }
+        } else if(tipo2 == 9) {
+            ListaTabla.push(new TablaSimbolos(id, "VOID", "METODO", ambito, linea, columna));
+        } else {
+            if(tipo1==1){
+                ListaTabla.push(new TablaSimbolos(id,"STRING","VARIABLE",ambito,linea,columna ));
+            }else if(tipo1 == 2){
+                ListaTabla.push(new TablaSimbolos(id,"BOOLEAN","VARIABLE",ambito,linea,columna ));
+            }else if(tipo1==3){
+                ListaTabla.push(new TablaSimbolos(id,"DOUBLE","VARIABLE",ambito,linea,columna ));
+            }else if(tipo1==4){
+                ListaTabla.push(new TablaSimbolos(id,"CHAR","VARIABLE",ambito,linea,columna ));
+            }else {
+                ListaTabla.push(new TablaSimbolos(id,"INT","VARIABLE",ambito,linea,columna ));
+            }
+        }
+    }
+}   

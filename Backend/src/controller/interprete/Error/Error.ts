@@ -1,14 +1,12 @@
+import { lista_errores } from '../Error/lista_errores';
 export class Error {
     constructor(
-        public tipo: string,
-        public descripcion: string,
         public line: number,
-        public column: number
+        public column: number,
+        public tipo: string,
+        public descripcion: string
     ) {
-
-    }
-
-    public obtener_error() {
-        console.log("Tipo: "+this.tipo+" Descripcion: "+this.descripcion+" Linea: "+this.line+" Columna: "+this.column);
+        var error = "Linea: "+this.line+" Columna: "+this.column+" Tipo: "+this.tipo+" Error: "+this.descripcion;
+        lista_errores.push(error);
     }
 }

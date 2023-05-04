@@ -9,4 +9,6 @@ export abstract class Instruction {
     }
 
     public abstract execute(env: Environment):any;
+
+    public abstract getAST(): { codigorama: string, nombrenodo: string };
 }

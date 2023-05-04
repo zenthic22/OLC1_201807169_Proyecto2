@@ -2,6 +2,8 @@ import { Expression } from '../abstract/Expression';
 import { Environment } from '../abstract/Environment';
 import { Instruction } from '../abstract/Instruction';
 
+let contador:number = 0;
+
 export class SwitchCase extends Instruction {
     constructor(
         private condicion: Expression,
@@ -32,5 +34,23 @@ export class SwitchCase extends Instruction {
                 break;
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nodoswitch"+aleatorio.toString();
+
+        var cond: { codigorama:string, nombrenodo:string } = this.condicion.getAST();
+        var instru: { codigorama:string, nombrenodo:string } = this.cuerpo.getAST();
+
+        const codigorama = `
+        ${nombreNodoP}[label="SWITCH"];
+        nodocondicion${nombreNodoP}[label="CONDICION"];
+        ${cond.codigorama}
+        ${instru.codigorama}
+        ${nombreNodoP} -> nodocondicion${nombreNodoP} -> ${cond.nombrenodo};
+        ${nombreNodoP} -> ${instru.nombrenodo};
+        `
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()};
     }
 }

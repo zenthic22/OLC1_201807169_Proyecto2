@@ -4,6 +4,9 @@ import { Environment } from "../abstract/Environment";
 import { Type } from "../abstract/Return";
 import { Primitivo } from "../expression/Primitivo";
 import { TipoPrimitivo } from "../utils/TipoPrimitivo";
+import { Union } from "../utils/Union";
+
+let contador:number = 0;
 
 export class DeclararListaChar extends Instruction {
     private id: string[];
@@ -43,5 +46,45 @@ export class DeclararListaChar extends Instruction {
                 throw "nop2"
             }
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let tipo = "BOOLEAN";
+        if(this.tipo == 4) {
+            tipo = "STRING";
+        } else if(this.tipo == 0) {
+            tipo = "INT";
+        } else if(this.tipo == 1) {
+            tipo = "DOUBLE";
+        } else if(this.tipo == 3) {
+            tipo = "CHAR";
+        }
+        let ids = "";
+        let declaraciones = "";
+        const aleatorio = Math.floor(Math.random()*(100-0)+0);
+        let nombreNodoP = "nododeclararlistachar"+aleatorio.toString();
+        var val = {codigorama:"nodo",nombrenodo:"nodo[label =\"sinvalor\"]"}
+        for (const actual of this.id) {
+            ids += "nodoauxdeclarar"+actual+"[label =\"DECLARARLISTACHAR\"];\n";
+            ids += "nodotipo"+nombreNodoP+actual+"[label=\"TIPO\"];\n";
+            ids += "nodotipos"+nombreNodoP+actual+"[label="+tipo+"];\n";
+            ids +="nodosis"+nombreNodoP+actual+"[label=\"ID\"];\n";
+            ids +="nodosids"+nombreNodoP+actual+"[label="+actual+"];";
+            ids += val.codigorama+"\n";
+
+            declaraciones +=nombreNodoP +"-> nodoauxdeclarar"+actual+";\n";
+            declaraciones +="nodoauxdeclarar"+actual+"-> nodotipo"+nombreNodoP+actual+";\n";
+            declaraciones +="nodotipo"+nombreNodoP+actual+"->nodotipos"+nombreNodoP+actual+";\n";
+            declaraciones +="nodotipos"+nombreNodoP+actual+" -> nodosis"+nombreNodoP+actual+";\n";
+            declaraciones +="nodosis"+nombreNodoP+actual+"-> nodosids"+nombreNodoP+actual+";\n";
+            declaraciones +="nodoauxdeclarar"+actual+" ->"+ val.nombrenodo+";\n";
+        }
+
+        const codigorama =` 
+        ${nombreNodoP}[label ="DECLARARLISTACHAR"];
+        ${ids}
+        ${declaraciones}
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

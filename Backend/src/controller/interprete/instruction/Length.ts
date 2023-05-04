@@ -2,6 +2,9 @@ import { Instruction } from '../abstract/Instruction';
 import { Expression } from '../abstract/Expression';
 import { Environment } from '../abstract/Environment';
 import { Type } from '../abstract/Return';
+import { Union } from '../utils/Union';
+
+let contador:number = 0;
 
 export class Length extends Instruction {
     private value: Expression;
@@ -29,5 +32,14 @@ export class Length extends Instruction {
         } catch(error) {
             throw "error para esta funcion";
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodolenght"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="LENGTH"];
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

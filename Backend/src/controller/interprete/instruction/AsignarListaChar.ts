@@ -5,6 +5,8 @@ import { Primitivo } from '../expression/Primitivo';
 import { TipoPrimitivo } from '../utils/TipoPrimitivo';
 import { Type } from '../abstract/Return';
 
+let contador:number = 0;
+
 export class AsignarListaChar extends Instruction {
     private id: string;
     private value: Expression;
@@ -36,5 +38,20 @@ export class AsignarListaChar extends Instruction {
         } else {
             throw "no se encuentra la lista char";
         }
+    }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoasignacionlistachar"+aleatorio.toString();
+        const val:{codigorama:string ,nombrenodo:string} =this.value.getAST();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ASIGNARLISTA"];
+        nodoIDS${nombreNodoP}[label="IDLISTA"];
+        nodoid${nombreNodoP}[label="${this.id}"];
+        ${val.codigorama}
+        ${nombreNodoP} ->nodoIDS${nombreNodoP} ->nodoid${nombreNodoP};
+        ${nombreNodoP}->${val.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
     }
 }

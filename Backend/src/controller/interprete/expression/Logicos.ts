@@ -30,4 +30,27 @@ export class Logicos extends Expression {
             return { value: null, type: Type.NULL }
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let op="&&";
+        if(this.tipoLogico == TipoLogico.NOT){
+            op="!";
+        }else if(this.tipoLogico == TipoLogico.OR){
+             op="||";
+        }
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodologico"+aleatorio.toString();
+        const exiz:{codigorama:string ,nombrenodo:string} =this.izquierdo.getAST();
+        const exder:{codigorama:string ,nombrenodo:string} =this.derecho.getAST();
+        const codigorama =` 
+        ${nombreNodoP}[label ="LOGICO"];
+        nodooperacion${nombreNodoP}[label="${op}"];
+        ${exiz.codigorama}
+        ${exder.codigorama}
+        ${nombreNodoP} ->${exiz.nombrenodo};
+        ${nombreNodoP} -> nodooperacion${nombreNodoP};
+        ${nombreNodoP} ->${exder.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

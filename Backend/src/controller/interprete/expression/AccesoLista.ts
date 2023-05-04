@@ -31,4 +31,16 @@ export class AccesoLista extends Expression {
             throw "no se encuentra lista";
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoaccesolista"+aleatorio.toString();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ACCESOLISTA"];
+        nodoval_lst${nombreNodoP}[label="${this.id}"];
+        nodopos_lst${nombreNodoP}[label="${this.posicion}"];
+        ${nombreNodoP} -> nodoval_lst${nombreNodoP} -> nodopos_lst${nombreNodoP};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

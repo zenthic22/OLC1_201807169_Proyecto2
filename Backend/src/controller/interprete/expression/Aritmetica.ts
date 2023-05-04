@@ -219,4 +219,38 @@ export class Aritmetica extends Expression {
         }
         return { value: null, type: Type.NULL }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let tipo ="SUMA";
+        if(this.tipoOperacion == TipoAritmetica.RESTA){
+             tipo ="RESTA";
+        } else if(this.tipoOperacion == TipoAritmetica.MULTIPLICACION){
+                 tipo ="MULTIPLICACION";
+        }
+        else if(this.tipoOperacion == TipoAritmetica.DIVISION){
+             tipo ="DIVISION"
+        }
+        else if(this.tipoOperacion == TipoAritmetica.MENOSUNARIO){
+             tipo ="MENOSUNARIO";
+        }else if(this.tipoOperacion == TipoAritmetica.POTENCIA){
+                 tipo ="POTENCIA";
+        }
+        else if(this.tipoOperacion == TipoAritmetica.MODULO){
+                 tipo ="MODULO";
+        }
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodoaritmetica"+aleatorio.toString();
+        const exiz:{codigorama:string ,nombrenodo:string} =this.izquierdo.getAST();
+        const exder:{codigorama:string ,nombrenodo:string} =this.derecho.getAST();
+        const codigorama =` 
+        ${nombreNodoP}[label ="ARITMETICA"];
+        nodooperacion${nombreNodoP}[label="${tipo}"];
+        ${exiz.codigorama}
+        ${exder.codigorama}
+        ${nombreNodoP} ->${exiz.nombrenodo};
+        ${nombreNodoP} -> nodooperacion${nombreNodoP};
+        ${nombreNodoP} ->${exder.nombrenodo};
+        `;
+        return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+    }
 }

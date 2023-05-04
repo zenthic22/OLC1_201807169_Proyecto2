@@ -80,4 +80,35 @@ export class IncrementoDecremento extends Instruction {
             }
         }
     }
+
+    public getAST(): { codigorama: string; nombrenodo: string; } {
+        let acc = "++";
+        if(this.accion == 1){
+            acc="--";
+        }
+        const aleatorio = Math.floor(Math.random() * (100-0)+0);
+        let nombreNodoP= "nodo_incremento"+aleatorio.toString();
+        const valor:{codigorama:string ,nombrenodo:string} =this.value.getAST();
+        if(this.id?.id != null){
+            const ids:{codigorama:string ,nombrenodo:string} =this.id.getAST();
+            const codigorama =` 
+            ${nombreNodoP}[label ="INCREMENTO"];
+            nodoincremento${nombreNodoP}[label="${acc}"];
+            ${ids.codigorama}
+            ${nombreNodoP} -> ${ids.nombrenodo};
+            ${ids.nombrenodo} -> nodoincremento${nombreNodoP};
+            `;
+            return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+        }else{
+            const ids:{codigorama:string ,nombrenodo:string} =this.value.getAST();
+            const codigorama =` 
+            ${nombreNodoP}[label ="DECREMENTO"];
+            nodoincremento${nombreNodoP}[label="${acc}"];
+            ${ids.codigorama}
+            ${nombreNodoP} ->${ids.nombrenodo};
+            ${ids.nombrenodo} -> nodoincremento${nombreNodoP};
+            `;
+            return {codigorama:codigorama , nombrenodo:nombreNodoP.toString()}
+        }
+    }
 }
